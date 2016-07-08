@@ -77,6 +77,7 @@ vido = function(e) {
     //声音点
     vprogress.innerHTML = '<div class="v-vPoint" v-bind:style="volume"></div>'
 
+    var vpoint = vprogress.getElementsByClassName("v-vPoint")[0];
 
     //时间
     var timeBox = document.createElement("a");
@@ -104,10 +105,10 @@ vido = function(e) {
             voiceSVG: '<svg xmlns:xlink="http://www.w3.org/1999/xlink" height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><use class="ytp-svg-shadow" xlink:href="#ytp-svg-47"></use><path class="ytp-svg-fill" d="m 9,15.37 0,5.25 3.58,0 4.48,4.37 0,-14 -4.48,4.37 -3.58,0 0,0 z M21,18 C21,16.43 20.01,15.08 18.78,14.42 l0,7.16 C20.1,20.92 21,19.57 21,18 z M 18.78,10.2 18.78,12.04 C21.35,12.8 23.22,15.18 23.22,18 23.22,20.82 21.35,23.2 18.78,23.96 L18.78,25.8 C22.34,24.99 25,21.8 25,18 25,14.2 22.34,11.01 18.78,10.2 z" id="ytp-svg-47"></path><svg class="ytp-svg-sound-mute-group" style="opacity: 0;"><use class="ytp-svg-shadow" xlink:href="#ytp-svg-48"></use><path class="ytp-svg-fill" d="M 26.11,15.73 24.85,14.5 22.52,16.76 20.20,14.5 18.94,15.73 21.26,18 18.94,20.26 20.20,21.5 22.52,19.23 24.85,21.5 26.11,20.26 23.79,18 l 2.32,-2.26 0,0 z" id="ytp-svg-48"></path></svg></svg>',
             vf: '<svg xmlns:xlink="http://www.w3.org/1999/xlink"  height="100%" version="1.1" viewBox="0 0 36 36"><use class="ytp-svg-shadow" xlink:href="#ytp-svg-47"></use><path class="ytp-svg-fill" d="m 9,15.37 0,5.25 3.58,0 4.48,4.37 0,-14 -4.48,4.37 -3.58,0 0,0 z" id="ytp-svg-47"></path><svg class="ytp-svg-sound-mute-group" style="opacity: 1;"><use class="ytp-svg-shadow" xlink:href="#ytp-svg-48"></use><path class="ytp-svg-fill" d="M 26.11,15.73 24.85,14.5 22.52,16.76 20.20,14.5 18.94,15.73 21.26,18 18.94,20.26 20.20,21.5 22.52,19.23 24.85,21.5 26.11,20.26 23.79,18 l 2.32,-2.26 0,0 z" id="ytp-svg-48"></path></svg></svg>',
             vt: '<svg xmlns:xlink="http://www.w3.org/1999/xlink"  height="100%" version="1.1" viewBox="0 0 36 36"><use class="ytp-svg-shadow" xlink:href="#ytp-svg-47"></use><path class="ytp-svg-fill" d="m 9,15.37 0,5.25 3.58,0 4.48,4.37 0,-14 -4.48,4.37 -3.58,0 0,0 z M21,18 C21,16.43 20.01,15.08 18.78,14.42 l0,7.16 C20.1,20.92 21,19.57 21,18 z" id="ytp-svg-47"></path><svg class="ytp-svg-sound-mute-group" style="opacity: 0;"><use class="ytp-svg-shadow" xlink:href="#ytp-svg-48"></use><path class="ytp-svg-fill" d="M 26.11,15.73 24.85,14.5 22.52,16.76 20.20,14.5 18.94,15.73 21.26,18 18.94,20.26 20.20,21.5 22.52,19.23 24.85,21.5 26.11,20.26 23.79,18 l 2.32,-2.26 0,0 z" id="ytp-svg-48"></path></svg></svg>',
+            vm: '<svg xmlns:xlink="http://www.w3.org/1999/xlink" height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><use class="ytp-svg-shadow" xlink:href="#ytp-svg-47"></use><path class="ytp-svg-fill" d="m 9,15.37 0,5.25 3.58,0 4.48,4.37 0,-14 -4.48,4.37 -3.58,0 0,0 z M21,18 C21,16.43 20.01,15.08 18.78,14.42 l0,7.16 C20.1,20.92 21,19.57 21,18 z M 18.78,10.2 18.78,12.04 C21.35,12.8 23.22,15.18 23.22,18 23.22,20.82 21.35,23.2 18.78,23.96 L18.78,25.8 C22.34,24.99 25,21.8 25,18 25,14.2 22.34,11.01 18.78,10.2 z" id="ytp-svg-47"></path><svg class="ytp-svg-sound-mute-group" style="opacity: 0;"><use class="ytp-svg-shadow" xlink:href="#ytp-svg-48"></use><path class="ytp-svg-fill" d="M 26.11,15.73 24.85,14.5 22.52,16.76 20.20,14.5 18.94,15.73 21.26,18 18.94,20.26 20.20,21.5 22.52,19.23 24.85,21.5 26.11,20.26 23.79,18 l 2.32,-2.26 0,0 z" id="ytp-svg-48"></path></svg></svg>',
             duration: "",
             ct: "00:00",
-            volume: "left:100%",
-            cvolume: 0
+            volume: "left:100%"
         },
         created: function() {
             var md = this;
@@ -146,9 +147,12 @@ vido = function(e) {
     //计算左边距
     function getAbsLeft(obj) {
         var l = obj.offsetLeft;
-        while (obj.offsetParent != null) { obj = obj.offsetParent;
-            l += obj.offsetLeft; }
-        return l; }
+        while (obj.offsetParent != null) {
+            obj = obj.offsetParent;
+            l += obj.offsetLeft;
+        }
+        return l;
+    }
 
     //时间变化
     function videoTimeUp() {
@@ -342,35 +346,46 @@ vido = function(e) {
     //声音开关
     voiceSVG.addEventListener("click", function(e) {
         e.stopPropagation();
-        if (model.video.muted === false) {
-            model.video.muted = true;
-            model.cvolume = model.video.volume;
-            model.voiceSVG = model.vf;
+        if (video.muted === false) {
+            video.muted = true;
             model.volume = "left:" + 0 + "%";
+            model.voiceSVG = model.vf;
         } else {
-            model.video.muted = false;
-            model.voiceSVG = model.vt;
-            model.volume = "left:" + model.cvolume / 1 * 100 + "%";
+            video.muted = false;
+            video.volume === 0 ? video.volume = 1 : {};
+            model.volume = "left:" + video.volume * 100 + "%";
+            video.volume === 0 ? model.voiceSVG = model.vf : video.volume >= 0.6 ? model.voiceSVG = model.vm : model.voiceSVG = model.vt;
         }
     })
 
+    //拖动中...
+    function voiceMove(e) {
+        e.stopPropagation();
+        var x = (e.clientX - getAbsLeft(vprogress)) / vprogress.offsetWidth
+        x >= 1 ? x = 1 : x <= 0 ? x = 0 : {};
+        vpoint.style.left = x * 100 + "%";
+        video.volume = x;
+        video.volume === 0 ? video.muted = true : video.muted = false;
+        video.volume <= 0 ? model.voiceSVG = model.vf : video.volume >= 0.6 ? model.voiceSVG = model.vm : model.voiceSVG = model.vt;
+    }
+
+    //拖动结束
+    function voiceEnd(e) {
+        document.removeEventListener("mousemove", voiceMove)
+        document.removeEventListener("mouseup", this);
+    }
 
     //点击声音进度
     voiceContainer.addEventListener("click", function(e) {
+        voiceMove(e)
+    })
+
+
+    //声音拖拽设置
+    vpoint.addEventListener("mousedown", function(e) {
         e.stopPropagation();
-        var x = (e.clientX - getAbsLeft(vprogress)) / voiceContainer.offsetWidth;
-        console.log(x);
-        x >= 1 ? x = 1 : x <= 0 ? x = 0 : {};
-        model.volume = "left:" + x * 100 + "%";
-        if (x === 0) {
-            model.video.muted = true;
-            model.cvolume = model.video.volume;
-            model.voiceSVG = model.vf;
-        } else {
-            model.video.muted = false;
-            model.voiceSVG = model.vt;
-        }
-        model.video.volume = x;
+        document.addEventListener("mousemove", voiceMove)
+        document.addEventListener("mouseup", voiceEnd);
     })
 
 
