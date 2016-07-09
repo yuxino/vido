@@ -25,28 +25,28 @@
 ###HTML
 
 ```html
-    <div id="V-Video" class="v-video"></div>
+<div id="V-Video" class="v-video"></div>
 ```
 
 
 ```javascript
-     vi = new vido({
-        el: "#V-Video",//select elm
-        src: "http://7xqvgr.com1.z0.glb.clouddn.com/demo.mp4",//video src
-        w: "640px",//video width
-        h: "360px",//video height
-        autoplay: true//autoplay
-    });
+vi = new vido({
+    el: "#V-Video",//select elm
+    src: "http://7xqvgr.com1.z0.glb.clouddn.com/demo.mp4",//video src
+    w: "640px",//video width
+    h: "360px",//video height
+    autoplay: true//autoplay
+});
 ```
 
 **Options**
 
 
 ```css
-    /*Change color*/
-    .v-point,.v-loaded {
-        background: red;
-    }
+/*Change color*/
+.v-point,.v-loaded {
+    background: red;
+}
 ```
 
 such as rgb(98, 222, 216)
