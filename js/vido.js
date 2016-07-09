@@ -3,7 +3,7 @@ vido = function(e) {
     elm.style.width = e.w;
     elm.style.height = e.h;
     elm.innerHTML += '<div class="v-icon">{{{icon}}}</div>'
-    elm.innerHTML += '<video class="v-container" v-bind:src="src" />';
+    elm.innerHTML += '<video class="v-container" v-bind:src="src" poster="http://7xqvgr.com1.z0.glb.clouddn.com/demo.jpg" />';
     var video = document.getElementById("V-Video").getElementsByTagName("video")[0];
     video.autoplay = e.autoplay;
 
