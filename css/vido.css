@@ -31,7 +31,7 @@ body {
     top: -3px;
     width: 100%;
     position: absolute;
-    background: rgba(197, 197, 197, 0.71);
+    background: rgba(255,255,255,.5);
     height: 3px;
     bottom: 0;
     cursor: pointer;
@@ -50,9 +50,7 @@ body {
     float: left;
     height: 100%;
     margin-right: 13px;
-    margin-left: 5px;
-    left: -7px;
-    margin-left: 7px;
+    position: relative;
     opacity: 0;
     transition: all 0.3s ease;
 }
@@ -120,6 +118,47 @@ body {
     margin-right: 10px;
 }
 
+.v-setContainer {
+    position: absolute;
+    right: 0;
+    top: -90px;
+    width: 150px;
+    color: white;
+    font-size: 15px;
+    height: 80px;
+    background: rgba(28, 28, 28, 0.9);
+    text-shadow: 0 0 2px rgba(0, 0, 0, .5);
+    z-index: 200;
+    padding: 10px 0px;
+    cursor: pointer;
+    display: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.v-buffer {
+    height: 100%;
+    position: absolute;
+    z-index: 8;
+    background: rgba(197, 197, 197, 0.71);
+}
+
+.v-setElem {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 15px;
+}
+
+.v-setElem span {
+    float: right;
+}
+
+.v-setElem:hover {
+    background-color: rgba(224, 222, 222, 0.17);
+}
+
 .v-btnV:after {
     display: block;
     content: "clear";
@@ -130,7 +169,7 @@ body {
 }
 
 .v-btnV:hover .v-vContainer {
-    width: 60px;
+    width: 40px;
     opacity: 1;
 }
 
@@ -141,8 +180,17 @@ body {
     cursor: pointer;
 }
 
+.v-btnS {
+    height: 40px;
+    width: 36px;
+    float: right;
+    margin-right: 23px;
+    cursor: pointer;
+}
+
 .v-btn:hover,
-.v-btnR:hover {
+.v-btnR:hover,
+.v-btnS:hover {
     animation: v-scale 0.7s;
 }
 
@@ -167,7 +215,7 @@ body {
 
 .v-icon {
     position: absolute;
-    top: 50%;
+    top: 42%;
     left: 50%;
     width: 52px;
     height: 52px;
@@ -186,15 +234,26 @@ body {
 }
 
 .v-vprogress {
-    height: 150px;
-    height: 2px;
+    height: 3px;
     width: 100%;
     position: relative;
-    top: 19px;
+    top: 18px;
+    margin-right: 5px;
+    left: -7px;
+    background: #c9c9c9;
+    margin-left: 5px;
+}
+
+.v-vload {
+    height: 3px;
+    z-index: 1000;
+    top: 18px;
+    position: absolute;
     margin-right: 5px;
     left: -7px;
     background: white;
     margin-left: 5px;
+    transition: all 0.1s;
 }
 
 .v-time span {
@@ -210,8 +269,9 @@ body {
     height: 12px;
     background: white;
     position: absolute;
-    top: -5px;
+    top: -4px;
     border-radius: 100%;
+    transition: all 0.1s;
 }
 
 @keyframes v-video {
