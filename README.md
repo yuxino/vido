@@ -14,7 +14,6 @@
 
 
 ##Install
----
 
 ```bash
     git clone git@github.com:Nbsaw/vido.git
@@ -22,7 +21,6 @@
 <br />
 
 ##Usage
----
 
 ###HTML
 
