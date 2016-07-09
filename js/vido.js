@@ -333,7 +333,6 @@ vido = function(e) {
     //Speed
     next.onclick = function(e) {
         e.stopPropagation();
-        video.playbackRate >= 1.59 ? video.playbackRate = 1 : video.playbackRate = video.playbackRate + 0.2;
         console.log("没什么卵用的按钮⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄");
     }
 
