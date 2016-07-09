@@ -159,26 +159,19 @@ vido = function(e) {
                 md.duration = TimeCompute(video.duration);
                 vpoint.style.left = video.volume / 1 * 100 + "%";
                 vload.style.width = video.volume / 1 * 100 + "%";
-
-                function buffer() {
-                    console.log(video.buffered.end(0))
-                    vbuffer.style.width = video.buffered.end(0) / video.duration * 100 + "%";
-                }
                 if (e.autoplay === true) {
                     video.autoplay = true;
                     model.video.status = true;
                     play.innerHTML = '<svg xmlns:xlink="http://www.w3.org/1999/xlink" height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><use class="ytp-svg-shadow" xlink:href="#ytp-svg-30"></use><path class="ytp-svg-fill" d="M 12,26 16.33,26 16.33,10 12,10 z M 20.66,26 25,26 25,10 20.66,10 z" id="ytp-svg-30"></path></svg>';
                 }
-                video.addEventListener("loadstart", function() {
-                    video.buffered.start(0); //缓存加载
-                })
 
                 video.addEventListener("play", function() {
                     video.addEventListener("progress", buffer);
+
                 })
 
-                video.addEventListener("pause", function() {
-                    video.removeEventListener("progress", buffer);
+                video.addEventListener("loadstart", function() {
+                    console.log(video.buffered);
                 })
             })
             video.addEventListener("timeupdate", videoTimeUp);
@@ -221,6 +214,11 @@ vido = function(e) {
         loaded.style.width = video.currentTime / video.duration * 100 + "%";
         point.style.left = video.currentTime / video.duration * 100 + "%";
         model.ct = TimeCompute(video.currentTime);
+    }
+
+    //Buffer
+    function buffer() {
+        vbuffer.style.width = video.buffered.end(vi.video.buffered.length-1) / video.duration * 100 + "%";
     }
 
     //播放
@@ -365,15 +363,14 @@ vido = function(e) {
     progress.addEventListener("click", function(e) {
         e.stopPropagation();
         var x = e.clientX - getAbsLeft(bar);
+        x >= getAbsLeft(bar) + bar.offsetWidth ? x = video.duration : x <= 0 ? x = 0 : {};
         video.currentTime = (x / bar.offsetWidth) * video.duration;
-
     })
 
     //拖动中...
     function videoMove(e) {
         e.stopPropagation();
         var x = (e.clientX - getAbsLeft(bar)) / bar.offsetWidth
-        model.ct = TimeCompute(x * video.duration);
         x >= 100 ? x = 100 : x <= 0 ? x = 0 : {};
         loaded.style.width = x * 100 + "%";
         point.style.left = x * 100 + "%";
