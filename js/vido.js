@@ -477,7 +477,6 @@ vido = function(e) {
 
     //自动播放设置
     autoPlay.addEventListener("click", function(e) {
-        e.stopPropagation();
         autoPlayDes.innerHTML === "开" ? autoPlayDes.innerHTML = "关" : autoPlayDes.innerHTML = "开";
     })
 
