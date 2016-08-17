@@ -1,4 +1,12 @@
-vido = function(e) {
+(function(root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        define(factory);
+    } else if (typeof exports === 'object') {
+        module.exports = factory;
+    } else {
+        root.vido = factory;
+    }
+})(this, function(e) {
     var elm = document.getElementById(e.el.replace("#", ""));
     elm.style.width = e.w;
     elm.style.height = e.h;
@@ -539,4 +547,4 @@ vido = function(e) {
         }
     });
     return model;
-};
+});
