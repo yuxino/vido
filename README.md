@@ -2,7 +2,7 @@
 
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Nbsaw/vido/blob/master/LICENSE)      [![version](https://img.shields.io/badge/version-0.1-blue.svg)](https://github.com/Nbsaw/vido)    [![Ass](https://img.shields.io/badge/Transaction%20type-Ass-brightgreen.svg)](https://github.com/Nbsaw/vido)           [![build](https://img.shields.io/jenkins/s/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg?maxAge=2592000)](https://github.com/Nbsaw/vido)     [![build](https://img.shields.io/badge/dependency-VUE.js-brightgreen.svg)](http://vuejs.org/)      [![made](https://img.shields.io/badge/Made%20in-%E6%96%B0%E6%97%A5%E6%9A%AE%E9%87%8C-ff69b4.svg)](http://www.thactclub.cn/bbs/attachment/Fid_2/2_8880_424eb48b4c27fa4.jpg)      [![twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&maxAge=2592000)](https://twitter.com/nbsaw)      
 
-##Introduction
+## Introduction
 
 [demo](https://nbsaw.github.io/vido/)
 
@@ -13,16 +13,16 @@
 ![image](http://7xqvgr.com1.z0.glb.clouddn.com/C8%29AG@%5BHY7ZAD~YAJG%281360.png)
 
 
-##Install
+## Install
 
 ```bash
 git clone git@github.com:Nbsaw/vido.git
 ```
 <br />
 
-##Usage
+## Usage
 
-###HTML
+### HTML
 
 ```html
 <div id="V-Video" class="v-video"></div>
