@@ -302,10 +302,14 @@
 
     //按键监听
     document.addEventListener("keyup", function(e) {
-        e.stopPropagation();
-        if (e.keyCode === 27 || e.keyCode === 122) exitFullScreen();
         if (e.keyCode === 32) videoPlay();
     });
+
+    document.addEventListener("webkitfullscreenchange", function(e) {
+        if(!e.currentTarget.webkitIsFullScreen) {
+            exitFullScreen();
+        }
+      });
 
     //兼容火狐ESC
     var mozStatus = 0;
@@ -317,9 +321,6 @@
         }
     });
 
-    /*    element.addEventListener(“webkitfullscreenchange”, function() {
-            exitFullScreen()
-        });*/
     //点击播放
     play.addEventListener("click", function(e) {
         e.stopPropagation();

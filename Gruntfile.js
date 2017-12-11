@@ -14,15 +14,15 @@ module.exports = function(grunt) {
             },
             my_target: {
                 files: {
-                    'dest/vido.min.js': ['src/vido.js'],
-                    'dest/vue.min.js': ['src/vue.js']
+                    'dist/vido.min.js': ['src/vido.js'],
+                    'dist/vue.min.js': ['src/vue.js']
                 }
             }
         },
         cssmin: {
             css: {
                 src: 'src/vido.css',
-                dest: 'dest/vido.min.css'
+                dest: 'dist/vido.min.css'
             }
         }
     });
