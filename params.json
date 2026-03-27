@@ -1,6 +1,6 @@
 {
-  "name": "Test.GitHub.io",
-  "tagline": "Demo of V-Video",
-  "body": "<div id=\"V-Video\" class=\"v-video\"></div>\r\n\r\n\r\n\r\n<script type=\"text/javascript\" src=\"http://7xqvgr.com1.z0.glb.clouddn.com/vue.js\"></script>\r\n<script type=\"text/javascript\" src=\"http://7xqvgr.com1.z0.glb.clouddn.com/v-video.js\" charset=\"utf-8\"></script>\r\n<link rel=\"stylesheet\" type=\"text/css\" href=\"http://7xqvgr.com1.z0.glb.clouddn.com/v-video.css\">\r\n<script type=\"text/javascript\">\r\n    var vi, b;\r\n    window.onload = function() {\r\n        //New Video\r\n        vi = new Vvideo({\r\n            el: \"#V-Video\",\r\n            src: \"http://7xqvgr.com1.z0.glb.clouddn.com/demo.mp4\",\r\n            w: \"640px\",\r\n            h: \"360px\"\r\n        });\r\n}\r\n</script>",
+  "name": "vido",
+  "tagline": "Demo of vido",
+  "body": "<div id=\"V-Video\" class=\"v-video\"></div>\r\n\r\n\r\n\r\n<script type=\"text/javascript\" src=\"js/vue.min.js\"></script>\r\n<script type=\"text/javascript\" src=\"js/vido.min.js\" charset=\"utf-8\"></script>\r\n<link rel=\"stylesheet\" type=\"text/css\" href=\"css/vido.min.css\">\r\n<script type=\"text/javascript\">\r\n    var vi, b;\r\n    window.onload = function() {\r\n        //New Video\r\n        vi = new vido({\r\n            el: \"#V-Video\",\r\n            src: \"https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4\",\r\n            w: \"640px\",\r\n            h: \"360px\",\r\n            autoplay: true,\r\n            muted: true,\r\n            playsinline: true\r\n        });\r\n}\r\n</script>",
   "note": "Don't delete this file! It's used internally to help with page regeneration."
 }
