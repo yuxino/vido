@@ -301,7 +301,7 @@ body {
     bottom: 0;
 }
 
-@keyFrames v-p {
+@keyframes v-p {
     from {
         opacity: 0;
         transform: scale(1);

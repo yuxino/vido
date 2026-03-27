@@ -1,24 +1,28 @@
 # vido
 
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Nbsaw/vido/blob/master/LICENSE)      [![version](https://img.shields.io/badge/version-0.1-blue.svg)](https://github.com/Nbsaw/vido)    [![Ass](https://img.shields.io/badge/Transaction%20type-Ass-brightgreen.svg)](https://github.com/Nbsaw/vido)           [![build](https://img.shields.io/jenkins/s/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg?maxAge=2592000)](https://github.com/Nbsaw/vido)     [![build](https://img.shields.io/badge/dependency-VUE.js-brightgreen.svg)](http://vuejs.org/)      [![made](https://img.shields.io/badge/Made%20in-%E6%96%B0%E6%97%A5%E6%9A%AE%E9%87%8C-ff69b4.svg)](http://www.thactclub.cn/bbs/attachment/Fid_2/2_8880_424eb48b4c27fa4.jpg)      [![twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&maxAge=2592000)](https://twitter.com/nbsaw)      
+`vido` is a lightweight custom HTML5 video player demo built on top of Vue 1.x.
 
-## Introduction
+## Demo
 
-[demo](https://nbsaw.github.io/vido/)
+Run the local demo:
 
-<font size=4>a beautiful html 5 video</font>
+```bash
+npm install
+npm run build
+npm run start
+```
 
-<br />
+Then open [http://127.0.0.1:4321/demo/index.html](http://127.0.0.1:4321/demo/index.html).
 
-![image](http://7xqvgr.com1.z0.glb.clouddn.com/C8%29AG@%5BHY7ZAD~YAJG%281360.png)
-
+![vido demo](./demo/vido-demo.png)
 
 ## Install
 
 ```bash
-git clone git@github.com:Nbsaw/vido.git
+git clone https://github.com/yuxino/vido.git
+cd vido
+npm install
 ```
-<br />
 
 ## Usage
 
@@ -28,35 +32,74 @@ git clone git@github.com:Nbsaw/vido.git
 <div id="V-Video" class="v-video"></div>
 ```
 
+### JavaScript
 
 ```javascript
-vi = new vido({
-    el: "#V-Video",//select elm
-    src: "http://7xqvgr.com1.z0.glb.clouddn.com/demo.mp4",//video src
-    w: "640px",//video width
-    h: "360px",//video height
-    autoplay: true//autoplay
+var vi = new vido({
+    el: "#V-Video", // target element
+    src: "https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4", // video source
+    w: "640px", // video width
+    h: "360px", // video height
+    autoplay: true, // autoplay
+    muted: true, // recommended for modern browser autoplay
+    playsinline: true // avoid forced fullscreen on some mobile browsers
 });
 ```
 
-**Options**
+### Optional poster
 
+```javascript
+var vi = new vido({
+    el: "#V-Video",
+    src: "https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4",
+    poster: "https://example.com/poster.jpg",
+    w: "640px",
+    h: "360px"
+});
+```
+
+### Autoplay on modern browsers
+
+If you want autoplay to work reliably in current browsers, use:
+
+```javascript
+var vi = new vido({
+    el: "#V-Video",
+    src: "https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4",
+    autoplay: true,
+    muted: true,
+    playsinline: true,
+    w: "640px",
+    h: "360px"
+});
+```
+
+Browsers usually block autoplay when the video has audible sound. This repo now treats autoplay as a best-effort feature and falls back gracefully if playback is denied.
+
+## Styling
+
+Change the primary progress color:
 
 ```css
-/*Change color*/
-.v-point,.v-loaded {
+.v-point,
+.v-loaded {
     background: red;
 }
 ```
 
-such as rgb(98, 222, 216)
+For example: `rgb(98, 222, 216)`.
 
+![vido rgb demo](./demo/vido-demo-rgb.png)
 
-![image](http://7xqvgr.com1.z0.glb.clouddn.com/UC%7BOS52NK35VHZNJ4OG@74R.png)
+## Notes
+
+- The bundled assets are generated from `src/` into `dist/`.
+- The current build uses an older Grunt-based toolchain and Vue 1.x.
+- The demo uses the CDN source `https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4`.
 
 ## Todo
 
-- [ ] List API
-- [ ] Ui adjustment
-- [ ] next set
-- [ ] Fix some bug
+- [ ] Publish a clearer API reference
+- [ ] Polish UI details
+- [ ] Rework the unused "next" control
+- [ ] Fix remaining compatibility issues

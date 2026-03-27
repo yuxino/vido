@@ -7,14 +7,27 @@
         root.vido = factory;
     }
 })(this, function(e) {
+    e = e || {};
     var elm = document.getElementById(e.el.replace("#", ""));
+    if (!elm) {
+        throw new Error("vido: target element not found: " + e.el);
+    }
+    e.autoplay = e.autoplay === true;
+    e.muted = e.muted === true;
+    e.playsinline = e.playsinline !== false;
     elm.style.width = e.w;
     elm.style.height = e.h;
     elm.innerHTML += '<div class="v-icon">{{{icon}}}</div>';
     var poster = e.poster || "";
     elm.innerHTML += '<video class="v-container" v-bind:src="src" poster="'+poster+'" />';
-    var video = document.getElementById("V-Video").getElementsByTagName("video")[0];
+    var video = elm.getElementsByTagName("video")[0];
     video.autoplay = e.autoplay;
+    video.muted = e.muted;
+    video.defaultMuted = e.muted;
+    if (e.playsinline) {
+        video.setAttribute("playsinline", "playsinline");
+        video.setAttribute("webkit-playsinline", "webkit-playsinline");
+    }
 
     //图标
     var v_icon = elm.getElementsByTagName("div")[0];
@@ -169,18 +182,15 @@
                 vpoint.style.left = video.volume / 1 * 100 + "%";
                 vload.style.width = video.volume / 1 * 100 + "%";
                 if (e.autoplay === true) {
-                    video.autoplay = true;
-                    model.video.status = true;
-                    play.innerHTML = '<svg xmlns:xlink="http://www.w3.org/1999/xlink" height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><use class="ytp-svg-shadow" xlink:href="#ytp-svg-30"></use><path class="ytp-svg-fill" d="M 12,26 16.33,26 16.33,10 12,10 z M 20.66,26 25,26 25,10 20.66,10 z" id="ytp-svg-30"></path></svg>';
+                    attemptPlay();
                 }
                 video.addEventListener("play", function() {
                     video.addEventListener("progress", buffer);
                 });
-                video.addEventListener("loadstart", function() {
-                    console.log(video.buffered);
-                });
             });
             video.addEventListener("timeupdate", videoTimeUp);
+            video.addEventListener("play", syncPlayingUI);
+            video.addEventListener("pause", syncPausedUI);
         }
     });
 
@@ -224,31 +234,53 @@
 
     //Buffer
     function buffer() {
-        vbuffer.style.width = video.buffered.end(vi.video.buffered.length - 1) / video.duration * 100 + "%";
+        if (video.buffered.length > 0 && video.duration) {
+            vbuffer.style.width = video.buffered.end(video.buffered.length - 1) / video.duration * 100 + "%";
+        }
+    }
+
+    function syncPlayingUI() {
+        play.innerHTML = '<svg xmlns:xlink="http://www.w3.org/1999/xlink" height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><use class="ytp-svg-shadow" xlink:href="#ytp-svg-30"></use><path class="ytp-svg-fill" d="M 12,26 16.33,26 16.33,10 12,10 z M 20.66,26 25,26 25,10 20.66,10 z" id="ytp-svg-30"></path></svg>';
+        v_icon.className += " v-p";
+        model.icon = model.iconPause;
+        model.video.status = true;
+        setTimeout(function() {
+            v_icon.className = "v-icon";
+            clearTimeout(this);
+        }, 600);
+    }
+
+    function syncPausedUI() {
+        play.innerHTML = '<svg xmlns:xlink="http://www.w3.org/1999/xlink" height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><use class="ytp-svg-shadow" xlink:href="#ytp-svg-transition-11"></use><path class="ytp-svg-fill" d="M 12,26 18.5,22 18.5,14 12,10 z M 18.5,22 25,18 25,18 18.5,14 z" id="ytp-svg-transition-11"></path></svg>';
+        v_icon.className += " v-p";
+        model.icon = model.iconPlay;
+        model.video.status = false;
+        setTimeout(function() {
+            v_icon.className = "v-icon";
+            clearTimeout(this);
+        }, 600);
+    }
+
+    function attemptPlay() {
+        var playResult = model.video.play();
+        if (playResult && typeof playResult.then === "function") {
+            playResult.then(function() {
+                syncPlayingUI();
+            }).catch(function() {
+                syncPausedUI();
+            });
+        } else {
+            syncPlayingUI();
+        }
     }
 
     //播放
     function videoPlay() {
         if (model.video.status === true) {
             model.video.pause();
-            play.innerHTML = '<svg xmlns:xlink="http://www.w3.org/1999/xlink" height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><use class="ytp-svg-shadow" xlink:href="#ytp-svg-transition-11"></use><path class="ytp-svg-fill" d="M 12,26 18.5,22 18.5,14 12,10 z M 18.5,22 25,18 25,18 18.5,14 z" id="ytp-svg-transition-11"></path></svg>';
-            v_icon.className += " v-p";
-            model.icon = model.iconPlay;
-            model.video.status = false;
-            setTimeout(function() {
-                v_icon.className = "v-icon";
-                clearTimeout(this);
-            }, 600);
+            syncPausedUI();
         } else {
-            model.video.play();
-            play.innerHTML = '<svg xmlns:xlink="http://www.w3.org/1999/xlink" height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><use class="ytp-svg-shadow" xlink:href="#ytp-svg-30"></use><path class="ytp-svg-fill" d="M 12,26 16.33,26 16.33,10 12,10 z M 20.66,26 25,26 25,10 20.66,10 z" id="ytp-svg-30"></path></svg>';
-            v_icon.className += " v-p";
-            model.icon = model.iconPause;
-            model.video.status = true;
-            setTimeout(function() {
-                v_icon.className = "v-icon";
-                clearTimeout(this);
-            }, 600);
+            attemptPlay();
         }
     }
 
@@ -351,6 +383,8 @@
     function barMove(e) {
         e.stopPropagation();
         var x = e.clientX - getAbsLeft(bar);
+        if (x > bar.offsetWidth) x = bar.offsetWidth;
+        if (x < 0) x = 0;
         barHover.style.width = x + "px";
     }
 
@@ -372,8 +406,8 @@
     progress.addEventListener("click", function(e) {
         e.stopPropagation();
         var x = e.clientX - getAbsLeft(bar);
-        if (x >= getAbsLeft(bar) + bar.offsetWidth)
-            x = video.duration;
+        if (x >= bar.offsetWidth)
+            x = bar.offsetWidth;
         else if (x <= 0)
             x = 0;
         video.currentTime = (x / bar.offsetWidth) * video.duration;
@@ -383,8 +417,8 @@
     function videoMove(e) {
         e.stopPropagation();
         var x = (e.clientX - getAbsLeft(bar)) / bar.offsetWidth;
-        if (x >= 100)
-            x = 100;
+        if (x >= 1)
+            x = 1;
         else if (x <= 0)
             x = 0;
         loaded.style.width = x * 100 + "%";
@@ -396,8 +430,8 @@
     function videoEnd(e) {
         e.stopPropagation();
         var x = e.clientX - getAbsLeft(bar);
-        if (x >= getAbsLeft(bar) + bar.offsetWidth)
-            x = video.duration;
+        if (x >= bar.offsetWidth)
+            x = bar.offsetWidth;
         else if (x <= 0)
             x = 0;
         video.currentTime = (x / bar.offsetWidth) * video.duration;
@@ -426,12 +460,14 @@
         e.stopPropagation();
         if (video.muted === false) {
             video.muted = true;
+            model.video.muted = true;
             vpoint.style.left = "0%";
             vload.style.width = "0%";
             model.voiceSVG = model.vf;
 
         } else {
             video.muted = false;
+            model.video.muted = false;
             if (video.volume === 0) video.volume = 1;
             vpoint.style.left = video.volume / 1 * 100 + "%";
             vload.style.width = video.volume / 1 * 100 + "%";
@@ -459,6 +495,7 @@
             video.muted = true;
         else
             video.muted = false;
+        model.video.muted = video.muted;
         if (video.volume <= 0)
             model.voiceSVG = model.vf;
         else if (video.volume >= 0.6)
@@ -470,7 +507,7 @@
     //拖动结束
     function voiceEnd(e) {
         document.removeEventListener("mousemove", voiceMove);
-        document.removeEventListener("mouseup", this);
+        document.removeEventListener("mouseup", voiceEnd);
     }
 
     //点击声音进度
@@ -511,11 +548,20 @@
     setUp.addEventListener("click", setUpClick);
 
     //自动播放设置
-    autoPlay.addEventListener("click", function(e) {
-        if (autoPlayDes.innerHTML === "开")
+    autoPlay.addEventListener("click", function(event) {
+        event.stopPropagation();
+        if (autoPlayDes.innerHTML === "开") {
             autoPlayDes.innerHTML = "关";
-        else
+            video.autoplay = false;
+            e.autoplay = false;
+        } else {
             autoPlayDes.innerHTML = "开";
+            video.autoplay = true;
+            e.autoplay = true;
+            if (video.paused) {
+                attemptPlay();
+            }
+        }
     });
 
     //速度设置
