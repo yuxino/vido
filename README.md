@@ -1,6 +1,10 @@
-# vido
+<div align="center">
+  <img src="docs/vido-avatar.png" width="112" alt="vido">
+  <h1>vido</h1>
+  <p>A lightweight custom HTML5 video player built on Vue 1.x.</p>
+</div>
 
-`vido` is a lightweight custom HTML5 video player demo built on top of Vue 1.x.
+<br>
 
 ## Demo
 
