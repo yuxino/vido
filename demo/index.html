@@ -9,8 +9,22 @@
     <script type="text/javascript" src="../dist/vido.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../dist/vido.min.css">
     <script type="text/javascript" src="demo.js"></script>
+    <style>
+        body { margin: 0; padding: 24px; background: #161616; color: #eee; font: 14px/1.5 Arial, sans-serif; }
+        main { max-width: 800px; margin: auto; }
+        .player-frame { aspect-ratio: 16 / 9; }
+        a { color: inherit; }
+        @media (max-width: 420px) { body { padding: 8px; } }
+    </style>
 </head>
 <body>
-    <div id="V-Video" class="v-video"></div>
+    <main>
+        <h1>vido</h1>
+        <div class="player-frame"><div id="V-Video" class="v-video"></div></div>
+        <p>Big Buck Bunny trailer · © 2008 Blender Foundation / <a href="https://www.bigbuckbunny.org/">www.bigbuckbunny.org</a> · <a href="https://peach.blender.org/about/">CC BY 3.0</a> · <a href="https://media.w3.org/2010/05/bunny/trailer.mp4">W3C-hosted video</a></p>
+        <p>Focus the player and press Space, or Tab through the controls. Use arrow keys on the progress and volume sliders.</p>
+        <p><a href="https://vido.yuxino.cn">Vido website</a></p>
+        <noscript><p>This custom player needs JavaScript. <a href="https://media.w3.org/2010/05/bunny/trailer.mp4">Open the trailer directly</a>.</p></noscript>
+    </main>
 </body>
 </html>

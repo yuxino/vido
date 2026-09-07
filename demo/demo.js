@@ -1,10 +1,10 @@
 window.onload = function() {
     window.vi = new vido({
         el: "#V-Video", //select elm
-        src: "https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4", //video src
-        w: "640px", //video width
-        h: "360px", //video height
-        autoplay: true,
+        src: "https://media.w3.org/2010/05/bunny/trailer.mp4", // Big Buck Bunny trailer (CC BY 3.0)
+        w: "100%",
+        h: "100%",
+        autoplay: false,
         muted: true,
         playsinline: true
     });

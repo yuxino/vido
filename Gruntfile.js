@@ -10,7 +10,8 @@ module.exports = function(grunt) {
                 compress: {
                     drop_console: false
                 },
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+                banner: '/*! <%= pkg.name %> v<%= pkg.version %> | MIT License */\n',
+                preserveComments: 'some'
             },
             my_target: {
                 files: {

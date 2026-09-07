@@ -1,12 +1,12 @@
 {
   "name": "vido",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A lightweight HTML5 video player demo built with Vue 1.x",
   "main": "dist/vido.min.js",
   "scripts": {
     "build": "grunt",
     "start": "python3 -m http.server 4321",
-    "test": "npm run build"
+    "test": "npm run build && node --test tests/module.test.cjs"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/yuxino/vido/issues"
   },
-  "homepage": "https://github.com/yuxino/vido#readme",
+  "homepage": "https://vido.yuxino.cn",
   "devDependencies": {
     "grunt": "~0.4.5",
     "grunt-cli": "^1.5.0",

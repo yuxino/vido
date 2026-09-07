@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vido browser regressions</title>
+<link rel="stylesheet" href="../dist/vido.min.css">
+<style>body{font:16px/1.5 sans-serif;background:#222;color:#fff;margin:20px}#test-player{aspect-ratio:16/9;max-width:800px}button,input{font:inherit}pre{white-space:pre-wrap}</style>
+<h1>Vido browser regressions</h1>
+<button id="outside">Unrelated page button</button>
+<div id="test-player" class="v-video"></div>
+<pre id="results">Loading…</pre>
+<script src="../dist/vue.min.js"></script>
+<script>
+const asset = new URLSearchParams(location.search).has('dist') ? '../dist/vido.min.js' : '../src/vido.js';
+const script = document.createElement('script');
+script.src = asset;
+script.onload = async () => {
+    const results = [];
+    const check = (name, condition) => results.push({name, passed: !!condition});
+    const poster = 'invalid-poster" onerror="window.posterInjected=true';
+    const player = window.player = new vido({
+        el: '#test-player', w: '100%', h: '100%', muted: true,
+        poster, labels: {play:'Play', pause:'Pause', settings:'Settings', autoplay:'Autoplay', on:'On', off:'Off'}
+    });
+    const video = player.video;
+    const root = document.querySelector('#test-player');
+    const control = name => root.querySelector('[data-vido-control="'+name+'"]');
+    check('Poster remains a single attribute, not event markup', video.getAttribute('poster') === poster && !video.hasAttribute('onerror'));
+    check('Constructor returns the original Vue model and HTML video', player.$watch && video instanceof HTMLVideoElement);
+    check('Initial mute has correct range and label state', video.muted && Number(control('volume').value) === 0);
+    check('Seek disabled before finite duration is known', control('seek').disabled);
+    control('seek').value = 500;
+    control('seek').dispatchEvent(new Event('input', {bubbles:true}));
+    check('Unloaded seek does not change current time', video.currentTime === 0);
+    check('Native buttons and sliders expose names', ['play','mute','settings','fullscreen','autoplay','speed'].every(name => control(name).tagName === 'BUTTON' && control(name).getAttribute('aria-label')) && ['seek','volume'].every(name => control(name).type === 'range'));
+    check('Unused next control is removed', root.querySelectorAll('.v-btn').length === 1);
+    let playCalls = 0;
+    const originalPlay = video.play;
+    video.play = () => { playCalls++; return Promise.reject(new Error('Test denial')); };
+    document.querySelector('#outside').dispatchEvent(new KeyboardEvent('keydown', {key:' ',bubbles:true,cancelable:true}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {key:' ',keyCode:32,bubbles:true}));
+    check('Space elsewhere does not control the player', playCalls === 0);
+    root.dispatchEvent(new KeyboardEvent('keydown', {key:' ',bubbles:true,cancelable:true}));
+    await new Promise(resolve => setTimeout(resolve,0));
+    check('Focused-player shortcut attempts play and handles denial', playCalls === 1 && !root.querySelector('[data-vido-role="status"]').hidden);
+    let rejectOld;
+    video.play = () => new Promise((resolve,reject) => { rejectOld = reject; });
+    control('play').click();
+    video.play = () => new Promise(() => {});
+    control('play').click();
+    const status = root.querySelector('[data-vido-role="status"]');
+    status.hidden = true;
+    rejectOld(new Error('An earlier play request failed'));
+    await new Promise(resolve => setTimeout(resolve,0));
+    check('An older play rejection cannot replace a newer request state', status.hidden);
+    video.play = () => Promise.reject(Object.assign(new Error('Playback interrupted'),{name:'AbortError'}));
+    control('play').click();
+    await new Promise(resolve => setTimeout(resolve,0));
+    check('A normal play interruption does not report a playback failure', status.hidden);
+    control('settings').click();
+    check('Opening settings moves keyboard focus into visible controls', control('settings').getAttribute('aria-expanded') === 'true' && document.activeElement === control('autoplay'));
+    control('autoplay').click();
+    check('Translated autoplay label does not determine toggle logic', video.autoplay && control('autoplay').getAttribute('aria-pressed') === 'true');
+    control('autoplay').click();
+    check('Autoplay can be switched back off', !video.autoplay);
+    control('autoplay').dispatchEvent(new KeyboardEvent('keydown', {key:'Escape',bubbles:true}));
+    check('Escape closes settings and restores trigger focus', control('settings').getAttribute('aria-expanded') === 'false' && document.activeElement === control('settings'));
+    control('volume').value = 0.35;
+    control('volume').dispatchEvent(new Event('input',{bubbles:true}));
+    check('Volume range updates the actual HTML media state', Math.abs(video.volume - 0.35) < 0.001 && !video.muted);
+    video.muted = true;
+    video.dispatchEvent(new Event('volumechange'));
+    check('External volume changes update the UI', Number(control('volume').value) === 0);
+    control('speed').click();
+    check('Speed control changes actual playback rate', video.playbackRate === 1.25);
+    video.play = originalPlay;
+    video.playbackRate = 1;
+    video.removeAttribute('poster');
+    window.regressionResults = results;
+    document.querySelector('#results').textContent = JSON.stringify({asset, passed:results.filter(x=>x.passed).length,total:results.length,results},null,2);
+};
+document.head.appendChild(script);
+</script>

@@ -1,9 +1,3 @@
-body {
-    width: 100%;
-    margin: 0;
-}
-
-
 /*Change color*/
 
 .v-point,
@@ -14,8 +8,28 @@ body {
 .v-video {
     position: relative;
     display: inline-block;
-    z-index: 10000;
     background: black;
+    max-width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: normal;
+    isolation: isolate;
+}
+
+.v-video button {
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    color: inherit;
+    background: transparent;
+    font: inherit;
+    fill: inherit;
+    cursor: pointer;
+}
+
+.v-video:focus-visible,
+.v-video button:focus-visible {
+    outline: 2px solid white;
+    outline-offset: -3px;
 }
 
 .v-container {
@@ -46,13 +60,12 @@ body {
 }
 
 .v-vContainer {
-    width: 0;
+    width: 56px;
     float: left;
     height: 100%;
     margin-right: 13px;
     position: relative;
-    opacity: 0;
-    transition: all 0.3s ease;
+    opacity: 1;
 }
 
 .v-mask {
@@ -61,12 +74,16 @@ body {
     position: absolute;
     bottom: 0;
     z-index: 30;
-     opacity: 0; 
+    opacity: 1;
     background-repeat: repeat-x;
     background-position: bottom;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==);
     transition: all 0.2s;
-    animation: v-video 8s ease;
+}
+
+.v-video:focus-within .v-mask,
+.v-video[data-vido-state="paused"] .v-mask {
+    opacity: 1 !important;
 }
 
 .v-barHover {
@@ -86,8 +103,8 @@ body {
     position: absolute;
     bottom: 0px;
     fill: #ECEAEA;
-    left: 20px;
-    right: 20px;
+    left: 12px;
+    right: 12px;
     font-size: 0;
 }
 
@@ -122,7 +139,7 @@ body {
     position: absolute;
     right: 0;
     top: -90px;
-    width: 150px;
+    width: 190px;
     color: white;
     font-size: 15px;
     height: 80px;
@@ -145,7 +162,10 @@ body {
     background: rgba(197, 197, 197, 0.71);
 }
 
-.v-setElem {
+.v-video .v-setElem {
+    display: block;
+    width: 100%;
+    text-align: left;
     height: 30px;
     line-height: 30px;
     padding: 0 15px;
@@ -155,7 +175,7 @@ body {
     float: right;
 }
 
-.v-setElem:hover {
+.v-video .v-setElem:hover {
     background-color: rgba(224, 222, 222, 0.17);
 }
 
@@ -169,7 +189,7 @@ body {
 }
 
 .v-btnV:hover .v-vContainer {
-    width: 40px;
+    width: 56px;
     opacity: 1;
 }
 
@@ -200,7 +220,8 @@ body {
     top: -4px;
     position: absolute;
     border-radius: 100%;
-    display: none;
+    display: block;
+    transform: translateX(-50%);
     z-index: 10;
 }
 
@@ -274,6 +295,78 @@ body {
     transition: all 0.1s;
 }
 
+.v-range {
+    position: absolute;
+    z-index: 20;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 32px;
+    left: 0;
+    top: -14px;
+    opacity: 0;
+    cursor: pointer;
+    touch-action: pan-y;
+}
+
+.v-point, .v-loaded, .v-buffer, .v-barHover, .v-vPoint, .v-vload, .v-vprogress {
+    pointer-events: none;
+}
+
+.v-volume {
+    top: 3px;
+    left: -2px;
+}
+
+.v-progress:focus-within,
+.v-vContainer:focus-within {
+    outline: 2px solid white;
+    outline-offset: 4px;
+}
+
+.v-video .v-status {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    z-index: 40;
+    padding: 10px 12px;
+    color: white;
+    background: rgba(0, 0, 0, .8);
+    font-size: 14px;
+    line-height: 1.5;
+    pointer-events: none;
+}
+
+.v-video:fullscreen {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.v-video:-webkit-full-screen {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+@media (hover: none) {
+    .v-video .v-mask { opacity: 1 !important; }
+}
+
+@media (max-width: 420px) {
+    .v-bar { left: 10px; right: 10px; }
+    .v-btnS { margin-right: 0; }
+    .v-btnV { margin-right: 3px; }
+    .v-vContainer, .v-btnV:hover .v-vContainer { width: 34px; margin-right: 4px; }
+    .v-time { font-size: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .v-video *, .v-video *:before, .v-video *:after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
 @keyframes v-video {
     from {
         opacity: 1
@@ -292,7 +385,7 @@ body {
     }
 }
 
-:-webkit-full-screen {
+.v-video:-webkit-full-screen {
     background-color: black;
     position: fixed;
     top: 0;

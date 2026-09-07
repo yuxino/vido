@@ -1,109 +1,118 @@
 <div align="center">
   <img src="docs/vido-avatar.png" width="112" alt="vido">
   <h1>vido</h1>
-  <p>A lightweight custom HTML5 video player built on Vue 1.x.</p>
+  <p>A custom HTML5 video player built on Vue 1.x.</p>
+  <a href="https://vido.yuxino.cn">Website & interactive demo</a>
 </div>
 
-<br>
-
-## Demo
-
-Run the local demo:
+## Try it
 
 ```bash
 npm install
-npm run build
-npm run start
+npm test
+npm start
 ```
 
-Then open [http://127.0.0.1:4321/demo/index.html](http://127.0.0.1:4321/demo/index.html).
+Open [the local demo](http://127.0.0.1:4321/demo/index.html). It starts paused and muted. You can play, pause, seek, change volume, switch playback speed, and enter fullscreen where the browser supports it.
 
-![vido demo](./demo/vido-demo.png)
+The source remains a Vue 1.0.26 player with a Grunt build. Version 1.0.1 keeps the `new vido(...)` interface and adds native keyboard/touch sliders, named buttons, scoped keyboard shortcuts, modern fullscreen state handling, translated labels, and visible media errors. It removes the unused next button.
 
-## Install
+## Add a player
 
-```bash
-git clone https://github.com/yuxino/vido.git
-cd vido
-npm install
-```
-
-## Usage
-
-### HTML
+Load the bundled Vue runtime before Vido, then mount one player per empty target element:
 
 ```html
+<link rel="stylesheet" href="dist/vido.min.css">
+<script src="dist/vue.min.js"></script>
+<script src="dist/vido.min.js"></script>
+
 <div id="V-Video" class="v-video"></div>
-```
-
-### JavaScript
-
-```javascript
-var vi = new vido({
-    el: "#V-Video", // target element
-    src: "https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4", // video source
-    w: "640px", // video width
-    h: "360px", // video height
-    autoplay: true, // autoplay
-    muted: true, // recommended for modern browser autoplay
-    playsinline: true // avoid forced fullscreen on some mobile browsers
-});
-```
-
-### Optional poster
-
-```javascript
-var vi = new vido({
+<script>
+var player = new vido({
     el: "#V-Video",
-    src: "https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4",
-    poster: "https://example.com/poster.jpg",
+    src: "/movie.mp4",
     w: "640px",
-    h: "360px"
-});
-```
-
-### Autoplay on modern browsers
-
-If you want autoplay to work reliably in current browsers, use:
-
-```javascript
-var vi = new vido({
-    el: "#V-Video",
-    src: "https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4",
-    autoplay: true,
+    h: "360px",
+    autoplay: false,
     muted: true,
     playsinline: true,
-    w: "640px",
-    h: "360px"
+    poster: "/poster.jpg"
 });
+</script>
 ```
 
-Browsers usually block autoplay when the video has audible sound. This repo now treats autoplay as a best-effort feature and falls back gracefully if playback is denied.
+Use a video and poster you have permission to share. `el` accepts an element ID, not an arbitrary CSS selector. Width and height are CSS lengths; for a responsive player, put the target in a wrapper with `aspect-ratio: 16 / 9` and pass `w: "100%", h: "100%"`.
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `el` | Required | Empty target element ID, such as `#V-Video` |
+| `src` | None | A browser-playable media URL |
+| `w`, `h` | Container styles | CSS width and height |
+| `autoplay` | `false` | Request playback after loading; the browser may reject it |
+| `muted` | `false` | Start with sound muted |
+| `playsinline` | `true` | Request inline playback on mobile |
+| `poster` | None | Image shown before playback |
+| `labels` | Chinese labels | Override individual control and status strings |
+
+Autoplay is best effort. Use `muted: true` when requesting it; an audible autoplay request can be blocked. Changing the autoplay setting does not override browser policy.
+
+The return value is the existing Vue model. `player.video` is the real `HTMLVideoElement`, so standard media methods, properties, and events are available:
+
+```javascript
+player.video.addEventListener("timeupdate", function () {
+    console.log(player.video.currentTime);
+});
+player.video.pause();
+player.src = "/another-movie.mp4";
+```
+
+A `play()` call returns the browser's promise where supported; handle rejection in your own code. There is no dedicated `destroy()` API. For React or another framework, use an isolated iframe that loads these scripts and CSS, and remove the iframe when unmounting. This keeps the legacy Vue runtime and its document listeners inside the player document. Add `allow="fullscreen"` and `allowfullscreen` to enable iframe fullscreen.
+
+## Controls and labels
+
+Tab through the buttons and sliders. When the player itself has focus, Space toggles playback. Buttons use native Space/Enter behavior; sliders support arrow keys and Home/End. Escape closes the settings panel. Shortcuts elsewhere on the page do not control playback.
+
+Settings cycle through playback speeds `0.5`, `0.75`, `1`, `1.25`, `1.5`, and `2`. A native volume slider is exposed on touch screens, although some mobile browsers reserve volume control for device buttons. Fullscreen support depends on the browser and iframe permissions.
+
+Optional English labels:
+
+```javascript
+labels: {
+    player: "Vido video player", play: "Play", pause: "Pause", seek: "Playback position",
+    mute: "Mute", unmute: "Unmute", volume: "Volume", fullscreen: "Fullscreen",
+    exitFullscreen: "Exit fullscreen", settings: "Settings", autoplay: "Autoplay",
+    speed: "Playback speed", normal: "Normal", on: "On", off: "Off",
+    error: "The video could not load. Check the video URL or connection.",
+    playDenied: "Playback could not start. Press play to try again.",
+    fullscreenUnavailable: "Fullscreen is unavailable in this browser."
+}
+```
+
+Controls have stable `data-vido-control` values: `player`, `play`, `seek`, `mute`, `volume`, `fullscreen`, `settings`, `autoplay`, and `speed`. The seek input ranges from `0` to `1000` as a fraction of duration; volume ranges from `0` to `1`. The message area has `data-vido-role="status"`. Use these selectors for integration or tests, and standard media events for playback state.
 
 ## Styling
 
-Change the primary progress color:
+The original red progress accent remains customizable:
 
 ```css
 .v-point,
 .v-loaded {
-    background: red;
+    background: #fff;
 }
 ```
 
-For example: `rgb(98, 222, 216)`.
+The stylesheet is scoped to the player. Controls remain visible on touch devices and while keyboard focus is inside the player. Player animations respect `prefers-reduced-motion`.
 
-![vido rgb demo](./demo/vido-demo-rgb.png)
+## Scope and checks
 
-## Notes
+Vido uses the browser's HTML media support. It does not include an HLS/DASH engine, playlist, quality selector, caption menu, picture-in-picture control, or download feature. Browser codec support still applies. The historical Vue/Grunt toolchain has not been replaced by a React player.
 
-- The bundled assets are generated from `src/` into `dist/`.
-- The current build uses an older Grunt-based toolchain and Vue 1.x.
-- The demo uses the CDN source `https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4`.
+- `npm test` builds `src/` into `dist/` and checks both module exports.
+- [Browser regression page](http://127.0.0.1:4321/tests/regression.html) tests the source build; append `?dist=1` to test the distributed bundle. It reports its own pass count and does not load a video.
+- Use the demo for real playback, pointer/touch, keyboard, seeking, volume, and fullscreen checks. A passing build alone is not a browser compatibility test.
 
-## Todo
+## Demo media and license
 
-- [ ] Publish a clearer API reference
-- [ ] Polish UI details
-- [ ] Rework the unused "next" control
-- [ ] Fix remaining compatibility issues
+The demo loads the [Big Buck Bunny trailer hosted by W3C](https://media.w3.org/2010/05/bunny/trailer.mp4). © 2008 Blender Foundation / [www.bigbuckbunny.org](https://www.bigbuckbunny.org/), under [Creative Commons Attribution 3.0](https://creativecommons.org/licenses/by/3.0/); see the [film's official license information](https://peach.blender.org/about/). The repository references the trailer without modifying or bundling it. The former music-video CDN sample is no longer the demo source because its redistribution license was not established.
+
+Vido code is [MIT licensed](LICENSE). The bundled Vue runtime is © 2016 Evan You and also MIT licensed.
