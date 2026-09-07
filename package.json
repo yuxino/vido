@@ -1,6 +1,6 @@
 {
   "name": "vido",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A lightweight HTML5 video player demo built with Vue 1.x",
   "main": "dist/vido.min.js",
   "scripts": {

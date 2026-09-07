@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2
+
+- Restore Vido's original demo video, 初音未来 千本樱（电音版）, at `https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4`.
+- Update the demo title, direct-video fallback and README example; include the restored demo in the downloadable browser bundle.
+- Keep the player runtime and all control, accessibility and fullscreen fixes from 1.0.1 unchanged.
+
 ## 1.0.1
 
 - Keep the Vue 1.x constructor and returned media model compatible.

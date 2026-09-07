@@ -15,7 +15,7 @@ npm start
 
 Open [the local demo](http://127.0.0.1:4321/demo/index.html). It starts paused and muted. You can play, pause, seek, change volume, switch playback speed, and enter fullscreen where the browser supports it.
 
-The source remains a Vue 1.0.26 player with a Grunt build. Version 1.0.1 keeps the `new vido(...)` interface and adds native keyboard/touch sliders, named buttons, scoped keyboard shortcuts, modern fullscreen state handling, translated labels, and visible media errors. It removes the unused next button.
+The source remains a Vue 1.0.26 player with a Grunt build. Version 1.0.2 restores Vido's original demo video and keeps the 1.0.1 control fixes: native keyboard/touch sliders, named buttons, scoped keyboard shortcuts, modern fullscreen state handling, translated labels, and visible media errors. The `new vido(...)` interface remains compatible; the unused next button has been removed.
 
 ## Add a player
 
@@ -30,18 +30,17 @@ Load the bundled Vue runtime before Vido, then mount one player per empty target
 <script>
 var player = new vido({
     el: "#V-Video",
-    src: "/movie.mp4",
+    src: "https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4",
     w: "640px",
     h: "360px",
     autoplay: false,
     muted: true,
-    playsinline: true,
-    poster: "/poster.jpg"
+    playsinline: true
 });
 </script>
 ```
 
-Use a video and poster you have permission to share. `el` accepts an element ID, not an arbitrary CSS selector. Width and height are CSS lengths; for a responsive player, put the target in a wrapper with `aspect-ratio: 16 / 9` and pass `w: "100%", h: "100%"`.
+Replace `src` and the optional `poster` with your own media URLs. `el` accepts an element ID, not an arbitrary CSS selector. Width and height are CSS lengths; for a responsive player, put the target in a wrapper with `aspect-ratio: 16 / 9` and pass `w: "100%", h: "100%"`.
 
 | Option | Default | Meaning |
 | --- | --- | --- |
@@ -111,8 +110,10 @@ Vido uses the browser's HTML media support. It does not include an HLS/DASH engi
 - [Browser regression page](http://127.0.0.1:4321/tests/regression.html) tests the source build; append `?dist=1` to test the distributed bundle. It reports its own pass count and does not load a video.
 - Use the demo for real playback, pointer/touch, keyboard, seeking, volume, and fullscreen checks. A passing build alone is not a browser compatibility test.
 
-## Demo media and license
+## Demo media
 
-The demo loads the [Big Buck Bunny trailer hosted by W3C](https://media.w3.org/2010/05/bunny/trailer.mp4). © 2008 Blender Foundation / [www.bigbuckbunny.org](https://www.bigbuckbunny.org/), under [Creative Commons Attribution 3.0](https://creativecommons.org/licenses/by/3.0/); see the [film's official license information](https://peach.blender.org/about/). The repository references the trailer without modifying or bundling it. The former music-video CDN sample is no longer the demo source because its redistribution license was not established.
+The demo uses Vido's original CDN sample, [初音未来 千本樱（电音版）](https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4), corresponding to [BV19t41187z2](https://www.bilibili.com/video/BV19t41187z2/). The demo and example load that URL directly; the repository does not modify or bundle the video.
+
+## Code license
 
 Vido code is [MIT licensed](LICENSE). The bundled Vue runtime is © 2016 Evan You and also MIT licensed.
