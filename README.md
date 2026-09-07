@@ -5,6 +5,8 @@
   <a href="https://vido.yuxino.cn">Website & interactive demo</a>
 </div>
 
+[English](README.md) · [简体中文](README_ZH.md)
+
 ## Try it
 
 ```bash
