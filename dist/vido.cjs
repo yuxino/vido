@@ -1,4 +1,4 @@
-/*! Vido 2.0.1 | MIT License */
+/*! Vido 2.0.2 | MIT License */
 "use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;

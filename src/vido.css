@@ -112,9 +112,9 @@
 .vido .vido-companion {
   position: absolute;
   left: var(--vido-progress);
-  top: -10px;
-  width: 36px;
-  height: 36px;
+  top: -4px;
+  width: 28px;
+  height: 28px;
   overflow: visible;
   pointer-events: none;
   transform: translateX(-50%);

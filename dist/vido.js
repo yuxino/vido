@@ -1,4 +1,4 @@
-/*! Vido 2.0.1 | MIT License */
+/*! Vido 2.0.2 | MIT License */
 
 // src/vido.ts
 var strings = {

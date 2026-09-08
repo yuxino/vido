@@ -109,4 +109,4 @@ Vido code is [MIT licensed](LICENSE). Vido 2 no longer includes Vue. The Vue 1.0
 
 ## Progress avatar
 
-`avatars/gavin-happy.png` is a compact happy chibi portrait based on the user's supplied white-haired, lavender-eyed character with the crescent-moon bow. The white-background PNG is separate from the JavaScript; the SVG progress marker positions it. The earlier black-and-white-haired SVG was rejected and removed. Supply your own image URL and `colors` to customize the progress bar.
+`avatars/gavin-happy.png` is a compact happy chibi portrait based on the user's supplied white-haired, lavender-eyed character with the crescent-moon bow. The transparent PNG is separate from the JavaScript; the SVG progress marker positions it. The earlier black-and-white-haired SVG was rejected and removed. Supply your own image URL and `colors` to customize the progress bar.
