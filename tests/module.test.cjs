@@ -155,3 +155,36 @@ test('source replacement clears stale artwork and offers recovery for a failed r
   f.player.src = 'third.mp4'; assert.equal(f.video.hasAttribute('poster'), false);
   f.player.destroy();
 });
+test('multicolor progress accepts a palette, preserves playback/accent, and resets independently', () => {
+  const f = fixture(); f.state.duration = 100; f.state.currentTime = 38; f.fire('loadedmetadata');
+  f.player.setTheme({ accent: '#555', motion: false, colors: ['#aaa0e8', '#efb4c5', '#f0d6a3', '#b9cbef'] });
+  assert.equal(f.el.classList.contains('vido-multicolor'), true);
+  const palette = f.el.style.getPropertyValue('--vido-palette');
+  assert.match(palette, /^linear-gradient\(90deg,/);
+  assert.match(palette, /rgb\(170, 160, 232\)/); assert.match(palette, /rgb\(185, 203, 239\)/);
+  assert.match(palette, /#fff calc\(25% - 1px\), #fff calc\(25% \+ 1px\)/);
+  assert.equal(f.control('seek').value, '380'); assert.equal(f.el.dataset.vidoMotion, 'false');
+  f.player.setTheme({ colors: false });
+  assert.equal(f.el.classList.contains('vido-multicolor'), false);
+  assert.equal(f.el.style.getPropertyValue('--vido-palette'), '');
+  assert.equal(f.el.style.getPropertyValue('--vido-accent'), '#555');
+  assert.equal(f.control('seek').value, '380'); f.player.destroy();
+});
+test('palette updates reject invalid sizes, unsupported colors and CSS injection atomically', () => {
+  const f = fixture();
+  const invalid = [[], ['red'], Array(7).fill('red'), ['red', 'not-a-color'], ['red', 'blue; background: url(https://example.test)'], ['inherit', 'pink'], ['var(--page-color)', 'pink'], ['env(test)', 'pink'], [null, 'pink'], 'red,blue'];
+  for (const colors of invalid) {
+    f.player.setTheme({ colors });
+    assert.equal(f.el.classList.contains('vido-multicolor'), false);
+    assert.equal(f.el.style.getPropertyValue('--vido-palette'), '');
+  }
+  f.player.setTheme({ colors: ['rebeccapurple', 'rgb(230, 170, 190)'] });
+  const previous = f.el.style.getPropertyValue('--vido-palette'); assert.ok(previous);
+  for (const colors of invalid) {
+    f.player.setTheme({ colors });
+    assert.equal(f.el.style.getPropertyValue('--vido-palette'), previous);
+  }
+  f.player.setTheme({ colors: ['red', 'orange', 'yellow', 'green', 'blue', 'purple'] });
+  assert.match(f.el.style.getPropertyValue('--vido-palette'), /purple 100%/);
+  f.player.destroy(); assert.equal(f.el.getAttribute('style'), null);
+});

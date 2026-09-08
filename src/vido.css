@@ -84,6 +84,16 @@
   width: var(--vido-progress);
   background: var(--vido-accent);
 }
+/* Palette styling stays on the progress rail; controls retain the neutral theme. */
+.vido.vido-multicolor .vido-track,
+.vido.vido-multicolor .vido-buffer,
+.vido.vido-multicolor .vido-progress-fill {
+  height: 6px;
+  top: 11px;
+}
+.vido.vido-multicolor .vido-progress-fill {
+  background: var(--vido-palette);
+}
 .vido .vido-progress-fill:after {
   content: "";
   position: absolute;

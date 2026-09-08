@@ -17,7 +17,7 @@ npm test
 npm start
 ```
 
-打开[本地演示](http://127.0.0.1:4321/demo/index.html)，初始为暂停、静音。构建会生成 ESM、CommonJS、浏览器全局脚本和 TypeScript 类型。浏览器脚本目前压缩传输约 5.4 KiB，构建限制为 15 KiB。
+打开[本地演示](http://127.0.0.1:4321/demo/index.html)，初始为暂停、静音。构建会生成 ESM、CommonJS、浏览器全局脚本和 TypeScript 类型。浏览器脚本目前压缩传输约 5.7 KiB，构建限制为 15 KiB。
 
 ## 接到网站里
 
@@ -67,6 +67,7 @@ player.destroy();
 | `lang` | `'zh'` | `'zh'` 或 `'en'`；`labels` 可覆盖单条文案 |
 | `avatar` | 小圆点 | 图片地址或 `false`；支持 SVG、普通图片和图片 blob URL |
 | `accent` | 中性深灰 | 进度和焦点颜色，接受 CSS 颜色值 |
+| `colors` | `false` | 2–6 个具体 CSS 颜色，组成略粗的分段进度条；`false` 恢复单色 |
 | `motion` | `true` | 播放时头像轻轻晃动；始终尊重系统的减少动态效果设置 |
 | `autoplay`、`muted`、`loop` | 沿用已有视频 | 原生播放设置；自动播放一定从静音开始 |
 | `playsinline` | `true` | 支持时在手机页面内播放 |
@@ -74,6 +75,15 @@ player.destroy();
 | `w`、`h` | 自适应 | 兼容旧版的宽度和视频区域高度，接受 CSS 长度或像素数字 |
 
 `setTheme()` 只更新传入的字段。`avatar: false` 会换回圆点。头像通过 SVG 的 `<image>` 地址加载，不把外部 SVG 代码插进页面。你可以在自己的上传界面里创建图片 blob URL，再传给播放器；不用时由你的应用释放这个 URL。Vido 不上传图片、不记录观看行为，也不保存偏好。
+
+想让进度条带一点柔和的颜色，可以在创建时或 `setTheme()` 里传入：
+
+```ts
+player.setTheme({ colors: ['#aaa0e8', '#efb4c5', '#f0d6a3', '#b9cbef'] });
+player.setTheme({ colors: false }); // 换回单色。
+```
+
+只给进度条上色，按钮仍保持中性。彩色进度条稍粗一点，各段之间留有细小间隔。每组需要 2–6 个浏览器支持的颜色值；整组中有无效颜色时，保留原来的主题。这里不接受 CSS 变量或全局关键字。头像动态效果和系统的减少动态效果设置不受影响。
 
 有字幕轨道时才显示字幕选择。跨域 VTT 需要服务器允许 CORS，并为视频设置 `crossorigin`。画中画和全屏按浏览器能力显示，是否能打开还受权限限制；iPhone 可以使用系统原生全屏。在限制网页音量调节的手机上，用设备音量键。
 
@@ -97,6 +107,6 @@ player.destroy();
 
 Vido 代码使用 [MIT 许可](LICENSE)。2.0 不再包含 Vue；Vue 1.0.26 运行时及其 MIT 版权说明保留在历史 1.x 版本中，不进入 2.0 分发包。角色素材见[品牌图片说明](docs/brand-artwork.md)。
 
-## 可编辑头像
+## 进度条头像
 
-`avatars/gavin.svg` 参照 Ashita 已有的黑白发、紫眼角色绘制，使用可编辑的矢量路径。演示默认用它作为进度条头像。复制到自己的网站后把地址传给 `avatar`，也可以换成自己的图片；头像不会内嵌在播放器脚本里。
+`avatars/gavin-happy.png` 以用户提供的白发、淡紫眼睛、月亮蝴蝶结妹子为参考，制作成开心的 Q 版小头像。它是独立的白底 PNG，由 SVG 进度标记定位，不内嵌在脚本里。先前误用黑白发形象的 SVG 已移除。传入自己的图片地址和 `colors` 即可定制进度条。

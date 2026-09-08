@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.1
+
+- Add a customizable multi-color progress track.
+- Replace the incorrect avatar with the happy white-haired chibi from the supplied reference.
+- Keep the website player plain by default; customization is opt-in.
+
 ## 2.0.0 — 2026-09-08
 
 - Rebuild as a framework-free TypeScript player with ESM, CommonJS, browser-global and type declaration outputs. Remove Vue 1 and Grunt.

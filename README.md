@@ -17,7 +17,7 @@ npm test
 npm start
 ```
 
-Open [the local demo](http://127.0.0.1:4321/demo/index.html). It starts paused and muted. The build produces ESM, CommonJS, browser-global JavaScript and TypeScript declarations. The browser runtime has an enforced 15 KiB gzip budget; current output is about 5.4 KiB.
+Open [the local demo](http://127.0.0.1:4321/demo/index.html). It starts paused and muted. The build produces ESM, CommonJS, browser-global JavaScript and TypeScript declarations. The browser runtime has an enforced 15 KiB gzip budget; current output is about 5.7 KiB.
 
 ## Add a player
 
@@ -67,6 +67,7 @@ Imports are safe during server rendering. Construct the player after mounting an
 | `lang` | `'zh'` | `'zh'` or `'en'`; `labels` overrides individual strings |
 | `avatar` | Plain dot | An image URL or `false`; SVG, raster and image blob URLs work |
 | `accent` | Neutral charcoal | A CSS color for progress and focus |
+| `colors` | `false` | 2–6 concrete CSS colors for a thicker, segmented progress bar; `false` restores the single accent |
 | `motion` | `true` | Gentle avatar movement during playback; reduced-motion settings take priority |
 | `autoplay`, `muted`, `loop` | Existing video values | Native playback settings; requested autoplay always starts muted |
 | `playsinline` | `true` | Inline playback on supported mobile browsers |
@@ -74,6 +75,15 @@ Imports are safe during server rendering. Construct the player after mounting an
 | `w`, `h` | Responsive | Legacy width and video-surface height, as CSS lengths or pixel numbers |
 
 `setTheme()` updates only the fields you supply. Pass `avatar: false` to return to the dot. Avatars load through an SVG `<image>` URL; custom markup is never inserted into the page. An upload UI can create an image blob URL and pass it to `setTheme`; your app owns that URL and should revoke it when no longer used. Nothing is uploaded by Vido. The library does not store preferences or track viewers.
+
+For a soft four-color progress bar, pass the same option to the constructor or `setTheme()`:
+
+```ts
+player.setTheme({ colors: ['#aaa0e8', '#efb4c5', '#f0d6a3', '#b9cbef'] });
+player.setTheme({ colors: false }); // Back to the single accent.
+```
+
+Only the progress rail changes: slightly thicker, with small separators between colors. Controls stay neutral. Each palette must contain 2–6 valid color values supported by the browser; an invalid palette leaves the current theme intact. CSS variables and global keywords are not accepted as palette colors. Motion and system reduced-motion behavior are unchanged.
 
 Subtitles appear in a native select only when caption/subtitle tracks exist. Cross-origin VTT needs appropriate CORS headers and the video's `crossorigin` attribute. Picture-in-picture and fullscreen buttons appear when their APIs are available; actual use also depends on browser permissions. On iPhone, fullscreen can use the native video player. Device buttons control volume where mobile browsers restrict it.
 
@@ -97,6 +107,6 @@ The demo uses the original Vido sample, [初音未来 千本樱（电音版）](
 
 Vido code is [MIT licensed](LICENSE). Vido 2 no longer includes Vue. The Vue 1.0.26 runtime and its MIT copyright notice remain in historical 1.x revisions, not in the 2.0 distribution. Artwork is documented in [brand artwork notes](docs/brand-artwork.md).
 
-## Editable avatar
+## Progress avatar
 
-`avatars/gavin.svg` is a small editable vector based on the existing Ashita character (black-and-white hair, purple eyes). The demo uses it as the progress companion. Copy it into your site and pass its URL as `avatar`, or use your own image; no artwork is embedded in the JavaScript bundle.
+`avatars/gavin-happy.png` is a compact happy chibi portrait based on the user's supplied white-haired, lavender-eyed character with the crescent-moon bow. The white-background PNG is separate from the JavaScript; the SVG progress marker positions it. The earlier black-and-white-haired SVG was rejected and removed. Supply your own image URL and `colors` to customize the progress bar.

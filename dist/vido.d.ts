@@ -3,6 +3,8 @@ export interface VidoTheme {
     avatar?: string | false;
     /** Any valid CSS color; defaults to neutral charcoal. */
     accent?: string;
+    /** 2–6 concrete CSS colors for a segmented progress bar. False restores the accent. */
+    colors?: string[] | false;
     /** Disable the small companion animation. System reduced-motion always wins. */
     motion?: boolean;
 }

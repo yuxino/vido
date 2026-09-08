@@ -1,5 +1,5 @@
 import Vido from '../dist/vido.js';
-const player = new Vido({ el: '#player', lang: 'en', muted: true, avatar: '../avatars/gavin.svg' });
+const player = new Vido({ el: '#player', lang: 'en', muted: true, avatar: '../avatars/gavin-happy.png', colors: ['#aaa0e8', '#efb4c5', '#f0d6a3', '#b9cbef'] });
 let avatarURL;
 document.getElementById('avatar').addEventListener('change', event => {
   const file = event.target.files?.[0];

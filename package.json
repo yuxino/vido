@@ -1,6 +1,6 @@
 {
   "name": "vido",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A tiny, framework-free video player with a progress companion you can make your own.",
   "type": "module",
   "main": "dist/vido.cjs",

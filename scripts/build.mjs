@@ -1,7 +1,8 @@
 import { build } from 'esbuild';
 import { readFile, writeFile } from 'node:fs/promises';
 import { gzipSync } from 'node:zlib';
-const banner = '/*! Vido 2.0.0 | MIT License */';
+const { version } = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
+const banner = `/*! Vido ${version} | MIT License */`;
 const shared = { entryPoints: ['src/vido.ts'], bundle: true, target: ['es2020'], banner: { js: banner } };
 await Promise.all([
   build({ ...shared, format: 'esm', outfile: 'dist/vido.js' }),

@@ -1,4 +1,4 @@
-/*! Vido 2.0.0 | MIT License */
+/*! Vido 2.0.1 | MIT License */
 "use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -184,6 +184,28 @@ var Vido = class {
       const test = this.doc.createElement("span");
       test.style.color = theme.accent;
       if (test.style.color) this.el.style.setProperty("--vido-accent", theme.accent);
+    }
+    if (theme.colors === false) {
+      this.el.classList.remove("vido-multicolor");
+      this.el.style.removeProperty("--vido-palette");
+    } else if (Array.isArray(theme.colors) && theme.colors.length >= 2 && theme.colors.length <= 6) {
+      const probe = this.doc.createElement("span");
+      const colors = theme.colors.map((color) => {
+        if (typeof color !== "string" || /^(inherit|initial|unset|revert|revert-layer)$/i.test(color.trim()) || /(?:var|env)\(/i.test(color)) return "";
+        probe.style.color = "";
+        probe.style.color = color;
+        return probe.style.color;
+      });
+      if (colors.every(Boolean)) {
+        const stops = colors.map((color, index) => {
+          const start = index * 100 / colors.length, end = (index + 1) * 100 / colors.length;
+          const from = index === 0 ? "0%" : `calc(${start}% + 1px)`;
+          const to = index === colors.length - 1 ? "100%" : `calc(${end}% - 1px)`;
+          return `${color} ${from}, ${color} ${to}` + (index === colors.length - 1 ? "" : `, #fff ${to}, #fff calc(${end}% + 1px)`);
+        });
+        this.el.style.setProperty("--vido-palette", `linear-gradient(90deg, ${stops.join(", ")})`);
+        this.el.classList.add("vido-multicolor");
+      }
     }
     if (theme.motion !== void 0) this.el.dataset.vidoMotion = String(theme.motion);
     if (theme.avatar !== void 0) {
