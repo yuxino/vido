@@ -1,11 +1,13 @@
 <div align="center">
   <img src="docs/vido-avatar.png" width="112" alt="Vido chibi projectionist portrait">
-  <h1>vido</h1>
-  <p>A custom HTML5 video player built on Vue 1.x.</p>
+  <h1>vido 2</h1>
+  <p>A little video player. A progress companion you can make your own.</p>
   <a href="https://vido.yuxino.cn">Website & interactive demo</a>
 </div>
 
 [English](README.md) · [简体中文](README_ZH.md)
+
+Vido 2 is a fresh TypeScript player with **no framework or runtime dependencies**. Its controls sit below the picture. Playback, volume, seeking and captions use the browser's native video APIs; a small SVG image can follow your progress. It starts with a simple dot until you choose an avatar.
 
 ## Try it
 
@@ -15,107 +17,86 @@ npm test
 npm start
 ```
 
-Open [the local demo](http://127.0.0.1:4321/demo/index.html). It starts paused and muted. You can play, pause, seek, change volume, switch playback speed, and enter fullscreen where the browser supports it.
-
-The source remains a Vue 1.0.26 player with a Grunt build. Version 1.0.2 restores Vido's original demo video and keeps the 1.0.1 control fixes: native keyboard/touch sliders, named buttons, scoped keyboard shortcuts, modern fullscreen state handling, translated labels, and visible media errors. The `new vido(...)` interface remains compatible; the unused next button has been removed.
+Open [the local demo](http://127.0.0.1:4321/demo/index.html). It starts paused and muted. The build produces ESM, CommonJS, browser-global JavaScript and TypeScript declarations. The browser runtime has an enforced 15 KiB gzip budget; current output is about 5.4 KiB.
 
 ## Add a player
 
-Load the bundled Vue runtime before Vido, then mount one player per empty target element:
+For a website, keep a native video in the HTML so it also works before JavaScript loads:
 
 ```html
-<link rel="stylesheet" href="dist/vido.min.css">
-<script src="dist/vue.min.js"></script>
-<script src="dist/vido.min.js"></script>
-
-<div id="V-Video" class="v-video"></div>
-<script>
-var player = new vido({
-    el: "#V-Video",
-    src: "https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4",
-    w: "640px",
-    h: "360px",
-    autoplay: false,
-    muted: true,
-    playsinline: true
-});
+<link rel="stylesheet" href="dist/vido.css">
+<div id="player">
+  <video controls playsinline preload="metadata" poster="/poster.webp">
+    <source src="/movie.mp4" type="video/mp4">
+  </video>
+</div>
+<script type="module">
+  import Vido from './dist/vido.js';
+  const player = new Vido({
+    el: '#player',
+    lang: 'en',
+    avatar: '/my-avatar.svg'
+  });
 </script>
 ```
 
-Replace `src` and the optional `poster` with your own media URLs. `el` accepts an element ID, not an arbitrary CSS selector. Width and height are CSS lengths; for a responsive player, put the target in a wrapper with `aspect-ratio: 16 / 9` and pass `w: "100%", h: "100%"`.
+The constructor also accepts an empty container with `src`, or an explicit `video` element. Existing `<source>` and `<track>` elements stay intact. For a plain script, load `dist/vido.min.js` and use `new vido(...)` or `new Vido(...)`. With a package/bundler, import the class from `vido` and CSS from `vido/style.css`.
+
+```ts
+import Vido from 'vido';
+import 'vido/style.css';
+
+const player = new Vido({ el: wrapper, video, lang: 'en' });
+player.setTheme({ avatar: '/my-avatar.svg', accent: '#555', motion: false });
+player.setSource('/another-movie.mp4', '/another-poster.webp');
+// Standard native video methods and events remain available.
+await player.video.play();
+// Framework cleanup: remove listeners/UI and restore native video controls.
+player.destroy();
+```
+
+Imports are safe during server rendering. Construct the player after mounting and call `destroy()` when unmounting. There is no iframe or Vue runtime to manage. A supplied video is returned to its original DOM position; source changes and playback position remain. `setSource(url)` and `player.src = url` clear the previous poster; pass a second argument to set a new one. A video created by Vido is removed on destruction. Handle rejection when calling `player.video.play()` yourself.
+
+## Make it yours
 
 | Option | Default | Meaning |
 | --- | --- | --- |
-| `el` | Required | Empty target element ID, such as `#V-Video` |
-| `src` | None | A browser-playable media URL |
-| `w`, `h` | Container styles | CSS width and height |
-| `autoplay` | `false` | Request playback after loading; the browser may reject it |
-| `muted` | `false` | Start with sound muted |
-| `playsinline` | `true` | Request inline playback on mobile |
-| `poster` | None | Image shown before playback |
-| `labels` | Chinese labels | Override individual control and status strings |
+| `el` | Required | A container element or CSS selector |
+| `video` | First video inside `el` | A native video to enhance; otherwise Vido creates one |
+| `src`, `poster` | Existing video values | Media and preview URLs |
+| `lang` | `'zh'` | `'zh'` or `'en'`; `labels` overrides individual strings |
+| `avatar` | Plain dot | An image URL or `false`; SVG, raster and image blob URLs work |
+| `accent` | Neutral charcoal | A CSS color for progress and focus |
+| `motion` | `true` | Gentle avatar movement during playback; reduced-motion settings take priority |
+| `autoplay`, `muted`, `loop` | Existing video values | Native playback settings; requested autoplay always starts muted |
+| `playsinline` | `true` | Inline playback on supported mobile browsers |
+| `tracks` | None added | WebVTT subtitle tracks: `{src, srclang, label, default?}` |
+| `w`, `h` | Responsive | Legacy width and video-surface height, as CSS lengths or pixel numbers |
 
-Autoplay is best effort. Use `muted: true` when requesting it; an audible autoplay request can be blocked. Changing the autoplay setting does not override browser policy.
+`setTheme()` updates only the fields you supply. Pass `avatar: false` to return to the dot. Avatars load through an SVG `<image>` URL; custom markup is never inserted into the page. An upload UI can create an image blob URL and pass it to `setTheme`; your app owns that URL and should revoke it when no longer used. Nothing is uploaded by Vido. The library does not store preferences or track viewers.
 
-The return value is the existing Vue model. `player.video` is the real `HTMLVideoElement`, so standard media methods, properties, and events are available:
+Subtitles appear in a native select only when caption/subtitle tracks exist. Cross-origin VTT needs appropriate CORS headers and the video's `crossorigin` attribute. Picture-in-picture and fullscreen buttons appear when their APIs are available; actual use also depends on browser permissions. On iPhone, fullscreen can use the native video player. Device buttons control volume where mobile browsers restrict it.
 
-```javascript
-player.video.addEventListener("timeupdate", function () {
-    console.log(player.video.currentTime);
-});
-player.video.pause();
-player.src = "/another-movie.mp4";
-```
+## Controls
 
-A `play()` call returns the browser's promise where supported; handle rejection in your own code. There is no dedicated `destroy()` API. For React or another framework, use an isolated iframe that loads these scripts and CSS, and remove the iframe when unmounting. This keeps the legacy Vue runtime and its document listeners inside the player document. Add `allow="fullscreen"` and `allowfullscreen` to enable iframe fullscreen.
+Tab moves between native buttons, ranges and selects. With focus on the player surface, Space/K toggles playback, Left/Right seeks five seconds, M toggles mute and F opens fullscreen. Focused sliders keep their native arrow/Home/End behavior. Shortcuts elsewhere on the page are untouched.
 
-## Controls and labels
+Speeds: 0.5×, 0.75×, 1×, 1.25×, 1.5×, 2×. Loading and media errors are visible; failed media can be retried. There is no HLS/DASH engine, playlist, account system, analytics or autoplay-with-sound workaround. Browser codec support and server byte-range support still matter.
 
-Tab through the buttons and sliders. When the player itself has focus, Space toggles playback. Buttons use native Space/Enter behavior; sliders support arrow keys and Home/End. Escape closes the settings panel. Shortcuts elsewhere on the page do not control playback.
+Stable `data-vido-control` selectors: `player`, `play`, `seek`, `mute`, `volume`, `speed`, `captions`, `pip`, `fullscreen`, `retry`. Seek ranges from 0 to 1000 as a fraction of duration. Volume ranges from 0 to 1. Status uses `data-vido-role="status"`; root `data-vido-state` reflects native paused/playing state.
 
-Settings cycle through playback speeds `0.5`, `0.75`, `1`, `1.25`, `1.5`, and `2`. A native volume slider is exposed on touch screens, although some mobile browsers reserve volume control for device buttons. Fullscreen support depends on the browser and iframe permissions.
+## Checks and migration
 
-Optional English labels:
+`npm test` checks module/SSR compatibility, native-state synchronization, preserved video nodes, destruction, stale play promises, recovery and safe avatar URLs. `npm run build` verifies types and the runtime budget. [The browser regression page](http://127.0.0.1:4321/tests/regression.html) exercises DOM behavior in a real browser; use the demo for actual decoding, audio, fullscreen and device checks. Automated DOM tests do not prove playback compatibility.
 
-```javascript
-labels: {
-    player: "Vido video player", play: "Play", pause: "Pause", seek: "Playback position",
-    mute: "Mute", unmute: "Unmute", volume: "Volume", fullscreen: "Fullscreen",
-    exitFullscreen: "Exit fullscreen", settings: "Settings", autoplay: "Autoplay",
-    speed: "Playback speed", normal: "Normal", on: "On", off: "Off",
-    error: "The video could not load. Check the video URL or connection.",
-    playDenied: "Playback could not start. Press play to try again.",
-    fullscreenUnavailable: "Fullscreen is unavailable in this browser."
-}
-```
+See [the 1.x → 2.0 migration notes](docs/migration-v2.md). Vue model methods and old `.v-*` CSS internals are intentionally gone.
 
-Controls have stable `data-vido-control` values: `player`, `play`, `seek`, `mute`, `volume`, `fullscreen`, `settings`, `autoplay`, and `speed`. The seek input ranges from `0` to `1000` as a fraction of duration; volume ranges from `0` to `1`. The message area has `data-vido-role="status"`. Use these selectors for integration or tests, and standard media events for playback state.
+## Demo media and license
 
-## Styling
+The demo uses the original Vido sample, [初音未来 千本樱（电音版）](https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4), from [BV19t41187z2](https://www.bilibili.com/video/BV19t41187z2/). It loads that external URL directly; the repository does not bundle or modify the video.
 
-The original red progress accent remains customizable:
+Vido code is [MIT licensed](LICENSE). Vido 2 no longer includes Vue. The Vue 1.0.26 runtime and its MIT copyright notice remain in historical 1.x revisions, not in the 2.0 distribution. Artwork is documented in [brand artwork notes](docs/brand-artwork.md).
 
-```css
-.v-point,
-.v-loaded {
-    background: #fff;
-}
-```
+## Editable avatar
 
-The stylesheet is scoped to the player. Controls remain visible on touch devices and while keyboard focus is inside the player. Player animations respect `prefers-reduced-motion`.
-
-## Scope and checks
-
-Vido uses the browser's HTML media support. It does not include an HLS/DASH engine, playlist, quality selector, caption menu, picture-in-picture control, or download feature. Browser codec support still applies. The historical Vue/Grunt toolchain has not been replaced by a React player.
-
-- `npm test` builds `src/` into `dist/` and checks both module exports.
-- [Browser regression page](http://127.0.0.1:4321/tests/regression.html) tests the source build; append `?dist=1` to test the distributed bundle. It reports its own pass count and does not load a video.
-- Use the demo for real playback, pointer/touch, keyboard, seeking, volume, and fullscreen checks. A passing build alone is not a browser compatibility test.
-
-## Demo media
-
-The demo uses Vido's original CDN sample, [初音未来 千本樱（电音版）](https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4), corresponding to [BV19t41187z2](https://www.bilibili.com/video/BV19t41187z2/). The demo and example load that URL directly; the repository does not modify or bundle the video.
-
-## Code license
-
-Vido code is [MIT licensed](LICENSE). The bundled Vue runtime is © 2016 Evan You and also MIT licensed.
+`avatars/gavin.svg` is a small editable vector based on the existing Ashita character (black-and-white hair, purple eyes). The demo uses it as the progress companion. Copy it into your site and pass its URL as `avatar`, or use your own image; no artwork is embedded in the JavaScript bundle.

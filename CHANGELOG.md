@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.0.0 — 2026-09-08
+
+- Rebuild as a framework-free TypeScript player with ESM, CommonJS, browser-global and type declaration outputs. Remove Vue 1 and Grunt.
+- Keep native video nodes, sources and events intact; provide lifecycle-safe `destroy()`, `setSource()` and `setTheme()`.
+- Move neutral controls below the video and add a customizable SVG image progress companion, safe image URLs, motion preferences and reduced-motion support.
+- Add direct playback-rate selection, optional WebVTT captions and capability-gated picture-in-picture, while retaining keyboard seeking, volume, fullscreen and error recovery.
+- Add a 15 KiB gzip runtime budget, lifecycle and asynchronous regression coverage, a modern demo and bilingual migration notes.
+
+This is a major version. Vue model methods, AMD and old `.v-*` styling internals are no longer supported.
+
 ## 1.0.2
 
 - Restore Vido's original demo video, 初音未来 千本樱（电音版）, at `https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4`.

@@ -1,30 +1,18 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>vido demo · 初音未来 千本樱（电音版）</title>
-    <link rel="icon" href="data:,">
-    <script type="text/javascript" src="../dist/vue.min.js"></script>
-    <script type="text/javascript" src="../dist/vido.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="../dist/vido.min.css">
-    <script type="text/javascript" src="demo.js"></script>
-    <style>
-        body { margin: 0; padding: 24px; background: #161616; color: #eee; font: 14px/1.5 Arial, sans-serif; }
-        main { max-width: 800px; margin: auto; }
-        .player-frame { aspect-ratio: 16 / 9; }
-        a { color: inherit; }
-        @media (max-width: 420px) { body { padding: 8px; } }
-    </style>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vido 2 · A little video player</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../dist/vido.css">
+  <style>
+    body{margin:0;padding:40px 20px;background:#fafafa;color:#242424;font:15px/1.6 system-ui,sans-serif}main{max-width:800px;margin:auto}h1{font-size:40px;letter-spacing:-2px;margin:0}header{margin-bottom:24px}a{color:inherit}p{max-width:65ch}.note{font-size:13px;color:#666}fieldset{border:0;padding:0;display:flex;gap:18px;flex-wrap:wrap;margin:20px 0}label{display:flex;gap:8px;align-items:center}button,input{font:inherit}button{background:#fff;color:#242424;border:1px solid #ddd;border-radius:8px;padding:7px 12px;cursor:pointer}@media(max-width:420px){body{padding:20px 10px}}
+  </style>
 </head>
-<body>
-    <main>
-        <h1>vido</h1>
-        <div class="player-frame"><div id="V-Video" class="v-video"></div></div>
-        <p>Original Vido demo: <a href="https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4">初音未来 千本樱（电音版）</a> · <a href="https://www.bilibili.com/video/BV19t41187z2/">Original video page</a></p>
-        <p>Focus the player and press Space, or Tab through the controls. Use arrow keys on the progress and volume sliders.</p>
-        <p><a href="https://vido.yuxino.cn">Vido website</a></p>
-        <noscript><p>This custom player needs JavaScript. <a href="https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4">Open the original demo video directly</a>.</p></noscript>
-    </main>
-</body>
-</html>
+<body><main>
+  <header><h1>vido 2</h1><p>A little video player. Bring your own progress companion.</p></header>
+  <div id="player"><video controls playsinline muted preload="metadata"><source src="https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4" type="video/mp4"></video></div>
+  <fieldset><label>Progress avatar <input id="avatar" type="file" accept="image/*"></label><label><input id="motion" type="checkbox" checked> Little movements</label><button id="reset" type="button">Plain dot</button></fieldset>
+  <p class="note">Your image stays in this browser tab. Nothing is uploaded. Space/K plays or pauses; Left/Right skips five seconds when the player has focus.</p>
+  <p class="note">Original Vido demo: <a href="https://img.yuxino.cn/static/vido/BV19t41187z2_p1.mp4">初音未来 千本樱（电音版）</a> · <a href="https://www.bilibili.com/video/BV19t41187z2/">Original video page</a></p>
+  <p><a href="https://vido.yuxino.cn">Vido website</a> · <a href="../tests/regression.html">Browser regression checks</a></p>
+</main><script type="module" src="demo.js"></script></body></html>

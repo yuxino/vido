@@ -1,31 +1,49 @@
 {
   "name": "vido",
-  "version": "1.0.2",
-  "description": "A lightweight HTML5 video player demo built with Vue 1.x",
-  "main": "dist/vido.min.js",
+  "version": "2.0.0",
+  "description": "A tiny, framework-free video player with a progress companion you can make your own.",
+  "type": "module",
+  "main": "dist/vido.cjs",
+  "module": "dist/vido.js",
+  "types": "dist/vido.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/vido.d.ts",
+      "import": "./dist/vido.js",
+      "require": "./dist/vido.cjs"
+    },
+    "./style.css": "./dist/vido.css",
+    "./dist/*": "./dist/*",
+    "./avatars/*": "./avatars/*"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "README_ZH.md",
+    "docs/migration-v2.md",
+    "avatars"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "scripts": {
-    "build": "grunt",
+    "build": "node scripts/build.mjs && tsc",
     "start": "python3 -m http.server 4321",
-    "test": "npm run build && node --test tests/module.test.cjs"
+    "test": "npm run build && node --test tests/*.test.cjs"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yuxino/vido.git"
   },
-  "author": "",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/yuxino/vido/issues"
   },
   "homepage": "https://vido.yuxino.cn",
   "devDependencies": {
-    "grunt": "~0.4.5",
-    "grunt-cli": "^1.5.0",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-contrib-nodeunit": "~0.4.1",
-    "grunt-contrib-uglify": "~0.5.0",
-    "grunt-contrib-watch": "^1.0.0",
-    "grunt-css": "^0.5.4"
+    "esbuild": "^0.25.9",
+    "typescript": "^5.9.2",
+    "jsdom": "^26.1.0"
   }
 }

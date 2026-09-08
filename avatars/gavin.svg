@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Gavin 黑白发紫眼小头像">
+  <g stroke="#29252f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="#25232b" d="M18 54C8 35 21 12 42 12c27-5 42 14 37 39l6 23-16-4H27L12 76z"/>
+    <path fill="#fffaf5" d="M23 42c-6-3-9 5-5 10l7 4m48-14c6-3 9 5 5 10l-7 4M24 33h47l2 24c-1 18-12 27-25 27S24 74 23 58z"/>
+    <path fill="#f9f8fc" d="M49 15c21-5 37 13 32 37l-5 12-8-20-8-15-7 19-9-8-7 6 3-21z"/>
+    <path fill="#27242e" d="M47 15C27 12 16 28 18 43l7 13 4-23 9 14 5-25 5 14 5-16z"/>
+    <path fill="none" stroke="#a39baa" stroke-width="1.5" d="m59 21 11 17m-5-19 10 21M39 19l-6 13"/>
+    <path fill="#fff" stroke-width="2.7" d="M29 54q6-8 13-1v9q-6 8-12 0zM55 53q7-7 13 1l-1 8q-6 8-12 0z"/>
+    <ellipse fill="#b8a1e0" stroke="none" cx="36" cy="58" rx="4.6" ry="7"/><ellipse fill="#b8a1e0" stroke="none" cx="61" cy="58" rx="4.6" ry="7"/>
+    <ellipse fill="#494052" stroke="none" cx="36" cy="57" rx="2" ry="4"/><ellipse fill="#494052" stroke="none" cx="61" cy="57" rx="2" ry="4"/>
+    <circle fill="#fff" stroke="none" cx="34.5" cy="54.5" r="2"/><circle fill="#fff" stroke="none" cx="59.5" cy="54.5" r="2"/>
+    <path fill="none" stroke="#e3a9b2" stroke-width="2.8" d="m28 67 5 1m31 0 5-1"/>
+    <path fill="#eaa8b3" stroke-width="1.7" d="M43 72q5 3 11 0-1 8-6 8-4 0-5-8z"/>
+    <path fill="#f9f8fc" d="M72 51q14 12 6 18 11 8 2 14 7 8-3 9-13-1-9-10-9-7-2-13-5-7 6-18z"/>
+    <path fill="none" stroke="#aaa0b3" stroke-width="1.4" d="m70 65 8 4m-8 10 10 4"/>
+    <path fill="#29252f" d="m72 85-7-3 1 9 7-2 7 5 3-9-8 1z"/>
+    <path fill="none" stroke="#29252f" d="M45 14C37 0 52 0 56 5M44 12C36 4 30 7 32 12"/>
+  </g>
+</svg>

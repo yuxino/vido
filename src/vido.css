@@ -1,406 +1,306 @@
-/*Change color*/
-
-.v-point,
-.v-loaded {
-    background: red;
+.vido {
+  --vido-accent:#343434;
+  --vido-progress:0%;
+  --vido-buffer:0%;
+  display: block;
+  max-width: 100%;
+  min-width: 0;
+  color: #242424;
+  background: #fff;
+  border: 1px solid #e4e4e4;
+  border-radius: 14px;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  isolation: isolate;
+  overflow: hidden;
+  color-scheme: light;
+  box-sizing: border-box;
 }
-
-.v-video {
-    position: relative;
-    display: inline-block;
-    background: black;
-    max-width: 100%;
-    font-family: Arial, Helvetica, sans-serif;
-    line-height: normal;
-    isolation: isolate;
+.vido * {
+  box-sizing: border-box;
 }
-
-.v-video button {
-    border: 0;
-    border-radius: 0;
-    padding: 0;
-    color: inherit;
-    background: transparent;
-    font: inherit;
-    fill: inherit;
-    cursor: pointer;
+.vido .vido-shell {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
 }
-
-.v-video:focus-visible,
-.v-video button:focus-visible {
-    outline: 2px solid white;
-    outline-offset: -3px;
+.vido .vido-surface {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  background: #111;
+  flex: 1;
 }
-
-.v-container {
-    width: 100%;
-    height: 100%;
-    left: 0px;
-    top: 0px;
-    z-index: 25;
-    cursor: pointer;
+.vido .vido-video {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  max-height: 80vh;
+  height: auto;
+  object-fit: contain;
+  margin: 0;
+  border-radius: 0;
+  cursor: pointer;
 }
-
-.v-progress {
-    top: -3px;
-    width: 100%;
-    position: absolute;
-    background: rgba(255,255,255,.5);
-    height: 3px;
-    bottom: 0;
-    cursor: pointer;
+.vido .vido-controls {
+  padding: 14px 16px 7px;
+  flex-shrink: 0;
+  background: #fff;
 }
-
-.v-progress:hover {
-    height: 5px;
+.vido .vido-progress {
+  position: relative;
+  margin: 0 10px;
+  height: 28px;
 }
-
-.v-progress:hover .v-point {
-    display: block;
+.vido .vido-track,
+.vido .vido-buffer,
+.vido .vido-progress-fill {
+  position: absolute;
+  height: 4px;
+  top: 12px;
+  left: 0;
+  border-radius: 4px;
+  pointer-events: none;
 }
-
-.v-vContainer {
-    width: 56px;
-    float: left;
-    height: 100%;
-    margin-right: 13px;
-    position: relative;
-    opacity: 1;
+.vido .vido-track {
+  width: 100%;
+  background: #e8e8e8;
 }
-
-.v-mask {
-    height: 87px;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    z-index: 30;
-    opacity: 1;
-    background-repeat: repeat-x;
-    background-position: bottom;
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==);
-    transition: all 0.2s;
+.vido .vido-buffer {
+  width: var(--vido-buffer);
+  background: #c4c4c4;
 }
-
-.v-video:focus-within .v-mask,
-.v-video[data-vido-state="paused"] .v-mask {
-    opacity: 1 !important;
+.vido .vido-progress-fill {
+  width: var(--vido-progress);
+  background: var(--vido-accent);
 }
-
-.v-barHover {
-    height: 100%;
-    position: absolute;
-    z-index: 9;
-    background: white;
+.vido .vido-progress-fill:after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  background: var(--vido-accent);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  transform: translate(50%, -50%);
 }
-
-.v-SVGContainer {
-    float: left;
-    width: 40px;
-    height: 100%;
+.vido.vido-has-avatar .vido-progress-fill:after {
+  display: none;
 }
-
-.v-bar {
-    position: absolute;
-    bottom: 0px;
-    fill: #ECEAEA;
-    left: 12px;
-    right: 12px;
-    font-size: 0;
+.vido .vido-companion {
+  position: absolute;
+  left: var(--vido-progress);
+  top: -10px;
+  width: 36px;
+  height: 36px;
+  overflow: visible;
+  pointer-events: none;
+  transform: translateX(-50%);
 }
-
-.v-bar a {
-    text-decoration: none;
+.vido[data-vido-state=playing]:not([data-vido-motion=false]) .vido-companion image {
+  transform-origin: 50% 100%;
+  animation: vido-bob 1.3s ease-in-out infinite alternate;
 }
-
-.v-loaded {
-    height: 100%;
-    position: absolute;
-    z-index: 10;
+.vido .vido-seek {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 28px;
+  opacity: 0;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  touch-action: pan-y;
 }
-
-.v-btn {
-    height: 40px;
-    width: 36px;
-    float: left;
-    z-index: 100;
-    cursor: pointer;
+.vido .vido-progress:focus-within {
+  outline: 2px solid var(--vido-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
-
-.v-btnV {
-    height: 40px;
-    width: auto;
-    float: left;
-    cursor: pointer;
-    z-index: 100;
-    margin-right: 10px;
+.vido .vido-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
 }
-
-.v-setContainer {
-    position: absolute;
-    right: 0;
-    top: -90px;
-    width: 190px;
-    color: white;
-    font-size: 15px;
-    height: 80px;
-    background: rgba(28, 28, 28, 0.9);
-    text-shadow: 0 0 2px rgba(0, 0, 0, .5);
-    z-index: 200;
-    padding: 10px 0px;
-    cursor: pointer;
+.vido .vido-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  margin: 0;
+  box-shadow: none;
+}
+.vido .vido-button svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.vido .vido-button[data-vido-control=play] svg path {
+  fill: currentColor;
+  stroke-width: 1.7;
+}
+.vido[data-vido-state=playing] .vido-button[data-vido-control=play] svg path {
+  fill: none;
+  stroke-width: 3;
+}
+.vido .vido-button:hover,
+.vido .vido-select:hover {
+  background: #f1f1f1;
+}
+.vido .vido-button:focus-visible,
+.vido .vido-select:focus-visible,
+.vido .vido-volume:focus-visible {
+  outline: 2px solid var(--vido-accent);
+  outline-offset: 1px;
+}
+.vido:focus-visible {
+  outline: 2px solid var(--vido-accent);
+  outline-offset: 3px;
+}
+.vido .vido-volume {
+  width: 58px;
+  min-width: 0;
+  margin: 0 7px 0 0;
+  accent-color: var(--vido-accent);
+  cursor: pointer;
+}
+.vido .vido-time {
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  white-space: nowrap;
+  margin-right: auto;
+  padding: 0 6px;
+  letter-spacing: 0;
+}
+.vido .vido-select {
+  color: inherit;
+  background: #fff;
+  border: 0;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 12px;
+  height: 34px;
+  max-width: 100px;
+  padding: 0 3px;
+  cursor: pointer;
+  margin: 0;
+  text-transform: none;
+}
+.vido .vido-status {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 17px 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #5b5b5b;
+}
+.vido .vido-status .vido-button {
+  width: auto;
+  gap: 6px;
+  padding: 4px 7px;
+  white-space: nowrap;
+}
+.vido [hidden] {
+  display: none !important;
+}
+.vido:fullscreen,
+.vido:-webkit-full-screen {
+  width: 100% !important;
+  height: 100% !important;
+  border: 0;
+  border-radius: 0;
+  background: #111;
+  display: flex;
+  flex-direction: column;
+}
+.vido:fullscreen .vido-shell,
+.vido:-webkit-full-screen .vido-shell {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+}
+.vido:fullscreen .vido-video,
+.vido:-webkit-full-screen .vido-video {
+  height: 100%;
+  max-height: 100%;
+  position: absolute;
+  inset: 0;
+}
+.vido:fullscreen .vido-controls,
+.vido:-webkit-full-screen .vido-controls {
+  padding-bottom: max(7px, env(safe-area-inset-bottom));
+}
+@media (max-width: 480px) {
+  .vido .vido-controls {
+    padding: 12px 8px 6px;
+  }
+  .vido .vido-volume {
     display: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  }
+  .vido .vido-button {
+    width: 34px;
+    height: 36px;
+    padding: 7px;
+  }
+  .vido .vido-time {
+    font-size: 11px;
+    padding: 0 2px;
+  }
+  .vido .vido-toolbar {
+    gap: 1px;
+  }
+  .vido .vido-select {
+    max-width: 70px;
+    font-size: 11px;
+  }
+  .vido .vido-captions {
+    max-width: 60px;
+  }
+  .vido .vido-status {
+    padding: 4px 12px 10px;
+  }
 }
-
-.v-buffer {
-    height: 100%;
-    position: absolute;
-    z-index: 8;
-    background: rgba(197, 197, 197, 0.71);
-}
-
-.v-video .v-setElem {
-    display: block;
-    width: 100%;
-    text-align: left;
-    height: 30px;
-    line-height: 30px;
-    padding: 0 15px;
-}
-
-.v-setElem span {
-    float: right;
-}
-
-.v-video .v-setElem:hover {
-    background-color: rgba(224, 222, 222, 0.17);
-}
-
-.v-btnV:after {
-    display: block;
-    content: "clear";
-    height: 0;
-    clear: both;
-    overflow: hidden;
-    visibility: hidden;
-}
-
-.v-btnV:hover .v-vContainer {
-    width: 56px;
-    opacity: 1;
-}
-
-.v-btnR {
-    height: 40px;
-    width: 36px;
-    float: right;
-    cursor: pointer;
-}
-
-.v-btnS {
-    height: 40px;
-    width: 36px;
-    float: right;
-    margin-right: 15px;
-    cursor: pointer;
-}
-
-.v-btn:hover,
-.v-btnR:hover,
-.v-btnS:hover {
-    animation: v-scale 0.7s;
-}
-
-.v-point {
-    width: 13px;
-    height: 13px;
-    top: -4px;
-    position: absolute;
-    border-radius: 100%;
-    display: block;
-    transform: translateX(-50%);
-    z-index: 10;
-}
-
-.v-time {
-    color: white;
-    float: left;
-    font-size: 15px;
-    height: 40px;
-    line-height: 40px;
-    font-family: Roboto, Arial, Helvetica, sans-serif;
-}
-
-.v-icon {
-    position: absolute;
-    top: 42%;
-    left: 50%;
-    width: 52px;
-    height: 52px;
-    z-index: 17;
-    opacity: 0;
-    margin-left: -26px;
-    margin-top: -26px;
-    background: rgba(0, 0, 0, .5);
-    border-radius: 26px;
-    pointer-events: none;
-    fill: white;
-}
-
-.v-p {
-    animation: v-p 0.6s ease;
-}
-
-.v-vprogress {
-    height: 3px;
-    width: 100%;
-    position: relative;
-    top: 18px;
-    margin-right: 5px;
-    left: -7px;
-    background: #c9c9c9;
-    margin-left: 5px;
-}
-
-.v-vload {
-    height: 3px;
-    z-index: 1000;
-    top: 18px;
-    position: absolute;
-    margin-right: 5px;
-    left: -7px;
-    background: white;
-    margin-left: 5px;
-    transition: all 0.1s;
-}
-
-.v-time span {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    margin-right: 5px;
-}
-
-.v-vPoint {
-    width: 12px;
-    height: 12px;
-    background: white;
-    position: absolute;
-    top: -4px;
-    border-radius: 100%;
-    transition: all 0.1s;
-}
-
-.v-range {
-    position: absolute;
-    z-index: 20;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 32px;
-    left: 0;
-    top: -14px;
-    opacity: 0;
-    cursor: pointer;
-    touch-action: pan-y;
-}
-
-.v-point, .v-loaded, .v-buffer, .v-barHover, .v-vPoint, .v-vload, .v-vprogress {
-    pointer-events: none;
-}
-
-.v-volume {
-    top: 3px;
-    left: -2px;
-}
-
-.v-progress:focus-within,
-.v-vContainer:focus-within {
-    outline: 2px solid white;
-    outline-offset: 4px;
-}
-
-.v-video .v-status {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    right: 12px;
-    z-index: 40;
-    padding: 10px 12px;
-    color: white;
-    background: rgba(0, 0, 0, .8);
-    font-size: 14px;
-    line-height: 1.5;
-    pointer-events: none;
-}
-
-.v-video:fullscreen {
-    width: 100% !important;
-    height: 100% !important;
-}
-
-.v-video:-webkit-full-screen {
-    width: 100% !important;
-    height: 100% !important;
-}
-
-@media (hover: none) {
-    .v-video .v-mask { opacity: 1 !important; }
-}
-
-@media (max-width: 420px) {
-    .v-bar { left: 10px; right: 10px; }
-    .v-btnS { margin-right: 0; }
-    .v-btnV { margin-right: 3px; }
-    .v-vContainer, .v-btnV:hover .v-vContainer { width: 34px; margin-right: 4px; }
-    .v-time { font-size: 12px; }
-}
-
 @media (prefers-reduced-motion: reduce) {
-    .v-video *, .v-video *:before, .v-video *:after {
-        animation: none !important;
-        transition: none !important;
-    }
+  .vido .vido-companion image {
+    animation: none !important;
+  }
+  .vido * {
+    scroll-behavior: auto;
+  }
 }
-
-@keyframes v-video {
-    from {
-        opacity: 1
-    }
-    to {
-        opacity: 0
-    }
-}
-
-@keyframes v-scale {
-    from {
-        transform: scale(1.15);
-    }
-    to {
-        transform: scale(1);
-    }
-}
-
-.v-video:-webkit-full-screen {
-    background-color: black;
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-}
-
-@keyframes v-p {
-    from {
-        opacity: 0;
-        transform: scale(1);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1.6);
-    }
+@keyframes vido-bob {
+  from {
+    transform: rotate(-5deg) translateY(0);
+  }
+  to {
+    transform: rotate(5deg) translateY(-2px);
+  }
 }
