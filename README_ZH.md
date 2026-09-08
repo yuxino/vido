@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="docs/vido-avatar.png" width="112" alt="Vido 白发放映员特写">
+  <img src="docs/vido-avatar.png" width="112" alt="Vido 白发 Q 版放映员圆形特写">
   <h1>vido</h1>
   <p>基于 Vue 1.x 的可自定义 HTML5 视频播放器。</p>
   <a href="https://vido.yuxino.cn">官网与交互演示</a>

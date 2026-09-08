@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="docs/vido-avatar.png" width="112" alt="vido">
+  <img src="docs/vido-avatar.png" width="112" alt="Vido chibi projectionist portrait">
   <h1>vido</h1>
   <p>A custom HTML5 video player built on Vue 1.x.</p>
   <a href="https://vido.yuxino.cn">Website & interactive demo</a>
